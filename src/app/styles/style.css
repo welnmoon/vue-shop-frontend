@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@import 'primeicons/primeicons.css';
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  width: 1280px;
+  margin: 0 auto;
+}
