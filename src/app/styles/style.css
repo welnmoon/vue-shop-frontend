@@ -1,37 +1,55 @@
 @import 'tailwindcss';
 @import 'primeicons/primeicons.css';
 
-.layout {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-  width: 1280px;
-  margin: 0 auto;
+@layer base {
+  * {
+    color: rgb(35, 50, 63);
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgb(35, 50, 63);
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  input {
+    padding: 0.1rem 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
 }
 
-* {
-  color: rgb(35, 50, 63);
-}
-h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: rgb(35, 50, 63);
-}
+/* @layer components {
+  .base-card {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+  }
 
-h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
+  .base-card__header {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
 
-h3 {
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-input {
-  padding: 0.1rem 0.3rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-}
+  .base-card__footer {
+    margin-top: 1rem;
+    text-align: right;
+  }
+} */

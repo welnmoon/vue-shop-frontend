@@ -1,32 +1,33 @@
 <template>
-  <section class="w-1/4 hidden md:block">
-    <h2 class="h2">Filters</h2>
+  <section class="hidden md:w-64 shrink-0 sticky top-4 self-start h-fit md:flex md:flex-col gap-4">
+    <h2>Filters</h2>
+    <BaseInput v-model="search" type="text" label="Search" placeholder="Search..." />
     <div>
-      <h3>Search</h3>
-      <input v-model="search" />
-    </div>
-    <div v-for="c in categories" :key="c">
-      <label>
-        <input type="checkbox" :value="c" v-model="category" />
-        {{ c }}
-      </label>
+      <label class="block text-lg font-medium">Categories</label>
+      <div class="flex flex-col gap-1">
+        <div v-for="c in categories" :key="c">
+          <BaseCheckbox :value="c" v-model="category">{{ c }}</BaseCheckbox>
+        </div>
+      </div>
     </div>
 
     <div>
       <h3>Price</h3>
-      <label for="price-min">От</label>
-      <input id="price-min" type="number" v-model.number="minPrice" />
-      <label for="price-max">До</label>
-      <input id="price-max" type="number" :max="productsMaxPrice" v-model.number="maxPrice" />
+      <BaseInput v-model="minPrice" type="number" label="От" placeholder="От" />
+      <BaseInput v-model="maxPrice" type="number" label="До" placeholder="До" />
     </div>
 
-    <button @click="resetFilters" class="">Сбросить</button>
+    <Button variant="secondary" type="reset" @click="resetFilters">Reset</Button>
   </section>
 </template>
 
 <script lang="ts" setup>
 import { categories, products } from '@/app/tempData'
-import { computed, reactive } from 'vue'
+import { useDebouncedRef } from '@/shared/composables/useDebouncedRef'
+import BaseCheckbox from '@/shared/ui/BaseCheckbox/BaseCheckbox.vue'
+import BaseInput from '@/shared/ui/BaseInput/BaseInput.vue'
+import Button from '@/shared/ui/Button/Button.vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -38,32 +39,51 @@ const resetFilters = () => {
   router.replace({ query: { maxPrice: productsMaxPrice.value } })
 }
 
-const category = computed({
-  get: () => route.query.category || [],
-  set: (v: string[]) => {
-    router.push({
-      query: {
-        ...route.query,
-        category: v,
-      },
-    })
+watch(
+  () => route.query.search,
+  (q) => {
+    const v = (Array.isArray(q) ? q[0] : q) ?? ''
+    search.value = v as string
   },
-})
+)
 
-const search = computed({
-  get: () => route.query.search || '',
-  set: (v: string) => {
+const category = computed<string[]>({
+  get: () => {
+    const q = route.query.category
+    if (Array.isArray(q)) return q.filter((x): x is string => typeof x === 'string')
+    if (typeof q === 'string') return [q]
+    return []
+  },
+  set: (v) => {
     router.replace({
       query: {
         ...route.query,
-        search: v,
+        category: v.length ? v : undefined,
       },
     })
   },
 })
 
-const minPrice = computed({
-  get: () => route.query.minPrice || 0,
+const search = ref(
+  (Array.isArray(route.query.search) ? route.query.search[0] : route.query.search) ?? '',
+)
+
+const debouncedSearch = useDebouncedRef(search, 500)
+
+watch(debouncedSearch, (v) => {
+  router.replace({
+    query: {
+      ...route.query,
+      search: debouncedSearch.value || undefined,
+    },
+  })
+})
+
+const minPrice = computed<string>({
+  get: () => {
+    const v = route.query.minPrice
+    return v === null ? '0' : String(v)
+  },
   set: (v: string) => {
     router.replace({
       query: {
@@ -74,8 +94,11 @@ const minPrice = computed({
   },
 })
 
-const maxPrice = computed({
-  get: () => route.query.maxPrice || productsMaxPrice.value,
+const maxPrice = computed<string>({
+  get: () => {
+    const v = route.query.maxPrice
+    return v === null ? String(productsMaxPrice.value) : String(v)
+  },
   set: (v: string) => {
     router.replace({
       query: {

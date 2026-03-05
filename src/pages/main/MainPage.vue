@@ -1,5 +1,5 @@
 <template>
-  <div className="flex gap-4">
+  <div class="flex gap-4 items-start">
     <FilterSidebar />
     <ProductsList />
   </div>
