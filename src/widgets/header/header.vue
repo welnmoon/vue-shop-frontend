@@ -8,7 +8,7 @@ const count = ref(0)
   <header class="w-full border-b bg-white">
     <div class="w-full px-4">
       <div class="max-w-7xl mx-auto flex items-center h-16 gap-6 md:gap-10 lg:gap-16">
-        <div class="text-xl font-semibold shrink-0">Vue Shop</div>
+        <h1 class="text-xl font-semibold shrink-0">Vue Shop</h1>
 
         <nav class="flex gap-4 md:gap-6 text-gray-700">
           <RouterLink to="/" class="hover:text-black">Home</RouterLink>

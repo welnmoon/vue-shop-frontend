@@ -9,3 +9,29 @@
   width: 1280px;
   margin: 0 auto;
 }
+
+* {
+  color: rgb(35, 50, 63);
+}
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgb(35, 50, 63);
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+input {
+  padding: 0.1rem 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
