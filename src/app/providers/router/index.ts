@@ -1,4 +1,5 @@
 import AboutPage from '@/pages/about/AboutPage.vue'
+import LoginPage from '@/pages/login/LoginPage.vue'
 import MainPage from '@/pages/main/MainPage.vue'
 import ProductPage from '@/pages/product/ProductPage.vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
@@ -7,6 +8,7 @@ const routes: RouteRecordRaw[] = [
   { path: '/', name: 'home', component: MainPage },
   { path: '/about', name: 'about', component: AboutPage },
   { path: '/product/:id', name: 'product', component: ProductPage, props: true },
+  { path: '/login', name: 'login', component: LoginPage },
 ]
 
 const router = createRouter({

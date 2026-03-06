@@ -31,6 +31,10 @@ import { products } from '@/app/tempData'
 import BaseCard from '@/shared/ui/BaseCard/BaseCard.vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useGetProducts } from '../api/useGetProducts'
+
+const productsFromServer = useGetProducts()
+console.log('productsFromServer', productsFromServer.data)
 
 const route = useRoute()
 
