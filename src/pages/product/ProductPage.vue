@@ -5,6 +5,8 @@
     <p class="mt-4 text-gray-700">{{ product.description }}</p>
     <div class="mt-4 text-xl font-semibold">{{ product.price }} $</div>
     <div class="mt-2 text-sm text-gray-500">{{ product.category }}</div>
+
+    <Button size="sm" @click="addToCart(product)">В корзину</Button>
   </div>
 
   <div v-else className="text-red-600 h-full w-full flex items-center justify-center">
@@ -13,12 +15,16 @@
 </template>
 
 <script lang="ts" setup>
+import { useCartStore } from '@/app/stores/cart'
 import { products } from '@/app/tempData'
+import Button from '@/shared/ui/Button/Button.vue'
 import { computed } from 'vue'
 
 const params = defineProps<{ id: string }>()
 
 const product = computed(() => products.find((p) => p.id === params.id))
+
+const addToCart = useCartStore().addItem
 </script>
 
 <style scoped></style>

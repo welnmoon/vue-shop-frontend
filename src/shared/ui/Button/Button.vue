@@ -1,7 +1,7 @@
 <template>
-  <button :type="type" :disabled="disabled" :class="buttonClass">
+  <v-btn :type="type" :disabled="disabled" :class="buttonClass">
     <slot />
-  </button>
+  </v-btn>
 </template>
 
 <script setup lang="ts">

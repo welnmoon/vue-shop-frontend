@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { useCartStore } from '@/app/stores/cart'
+import CartDrawer from '@/shared/ui/CartDrawer/CartDrawer.vue'
 import { ref } from 'vue'
 
-const count = ref(0)
+const itemsCount = useCartStore().itemsCount
+
+const cartDrawerToggle = ref(false)
 </script>
 
 <template>
@@ -18,11 +22,19 @@ const count = ref(0)
 
         <div class="flex items-center gap-3 md:gap-4 ml-auto">
           <i class="pi pi-user cursor-pointer"></i>
-          <i class="pi pi-shopping-cart cursor-pointer"></i>
+          <i @click="cartDrawerToggle = true" class="pi pi-shopping-cart cursor-pointer relative"
+            ><div
+              class="absolute top-0 w-4 h-4 text-xs -right-2 -translate-y-1/2 bg-red-600 text-white rounded-full flex items-center justify-center"
+            >
+              {{ itemsCount }}
+            </div></i
+          >
         </div>
       </div>
     </div>
   </header>
+
+  <CartDrawer v-model="cartDrawerToggle" />
 </template>
 
 <style lang="scss" scoped></style>

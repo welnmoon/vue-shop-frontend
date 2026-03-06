@@ -1,24 +1,6 @@
-export const categories = [
-  'Electronics',
-  'Clothing',
-  'Grocery',
-  'Accessories',
-  'Shoes',
-  'Home',
-  'Stationery',
-  'Sport',
-  'Beauty',
-]
+import type { Product } from '@/entities/product/model/types'
 
-export const products: {
-  id: string
-  title: string
-  description: string
-  price: number
-  image: string
-  category: string
-  createdAt: Date
-}[] = [
+export const products: Product[] = [
   {
     id: 'p-0001',
     title: 'Wireless Headphones A1',

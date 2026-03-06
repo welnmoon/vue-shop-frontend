@@ -22,7 +22,8 @@
 </template>
 
 <script lang="ts" setup>
-import { categories, products } from '@/app/tempData'
+import { products } from '@/app/tempData'
+import { categories } from '@/entities/product/model/types'
 import { useDebouncedRef } from '@/shared/composables/useDebouncedRef'
 import BaseCheckbox from '@/shared/ui/BaseCheckbox/BaseCheckbox.vue'
 import BaseInput from '@/shared/ui/BaseInput/BaseInput.vue'
