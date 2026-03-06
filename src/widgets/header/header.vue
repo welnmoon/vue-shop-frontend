@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { useCartStore } from '@/app/stores/cart'
 import CartDrawer from '@/shared/ui/CartDrawer/CartDrawer.vue'
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
-const itemsCount = useCartStore().itemsCount
+const cartStore = useCartStore()
+
+const { itemsCount } = storeToRefs(cartStore)
 
 const cartDrawerToggle = ref(false)
 </script>
