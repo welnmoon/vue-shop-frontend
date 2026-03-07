@@ -7,6 +7,8 @@
       :id="props.id"
       :type="props.type || 'text'"
       :value="props.modelValue"
+      :max="max"
+      :min="min"
     />
     <p v-if="props.error">{{ props.label }}</p>
   </div>
@@ -20,6 +22,8 @@ const props = defineProps<{
   type?: string
   id?: string
   placeholder?: string
+  max?: string
+  min?: string
 }>()
 
 const emit = defineEmits<{

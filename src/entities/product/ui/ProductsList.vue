@@ -3,7 +3,7 @@
     <div v-if="isLoading">Loading</div>
     <div v-if="isError">Error {{ error }}</div>
     <div v-else class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
-      <article class="h-full" v-for="p in productsFromServer" :key="p.id">
+      <article class="h-full" v-for="p in productsFromServer ?? []" :key="p.id">
         <BaseCard>
           <template #header>
             <img :src="p.image" :alt="p.title" class="w-full h-40 object-contain rounded" />

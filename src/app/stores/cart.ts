@@ -36,6 +36,8 @@ export const useCartStore = defineStore('cart', {
     getItems: (state) => state.items,
 
     getItemById: (state) => (id: string) => findCartItem(state.items, id),
+
+    getItemQuantity: (state) => (id: string) => findCartItem(state.items, id)?.quantity,
   },
 
   actions: {

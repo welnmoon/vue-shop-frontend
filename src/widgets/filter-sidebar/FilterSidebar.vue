@@ -13,8 +13,15 @@
 
     <div>
       <h3>Price</h3>
-      <BaseInput v-model="minPrice" type="number" label="От" placeholder="От" />
-      <BaseInput v-model="maxPrice" type="number" label="До" placeholder="До" />
+      <BaseInput v-model="minPrice" :max="maxPrice" type="number" label="От" placeholder="От" />
+      <BaseInput
+        v-model="maxPrice"
+        :min="minPrice"
+        :max="String(productsMaxPrice)"
+        type="number"
+        label="До"
+        placeholder="До"
+      />
     </div>
 
     <Button variant="secondary" type="reset" @click="resetFilters">Reset</Button>
