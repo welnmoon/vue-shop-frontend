@@ -38,6 +38,8 @@ export const useCartStore = defineStore('cart', {
     getItemById: (state) => (id: string) => findCartItem(state.items, id),
 
     getItemQuantity: (state) => (id: string) => findCartItem(state.items, id)?.quantity,
+
+    getCartPrice: (state) => state.items.reduce((acc, i) => acc + i.price * i.quantity, 0),
   },
 
   actions: {

@@ -24,7 +24,7 @@ const UIStore = useUIStore()
         </nav>
 
         <div class="flex items-center gap-3 md:gap-4 ml-auto">
-          <i class="pi pi-user cursor-pointer"></i>
+          <RouterLink to="/login"><i class="pi pi-user cursor-pointer"></i></RouterLink>
           <i @click="UIStore.toggleCartDrawer" class="pi pi-shopping-cart cursor-pointer relative"
             ><div
               class="absolute top-0 w-4 h-4 text-xs -right-2 -translate-y-1/2 bg-red-600 text-white rounded-full flex items-center justify-center"

@@ -1,29 +1,33 @@
 <template>
   <v-navigation-drawer
+    width="400"
     :model-value="props.modelValue"
     temporary
     location="right"
     @update:model-value="emit('update:modelValue', $event)"
-    class="no-scroll"
   >
-    <div class="p-4 flex items-center justify-between">
-      <h2 class="text-lg font-semibold">Корзина</h2>
-      <v-btn variant="text" @click="closeDrawer"><X /></v-btn>
-    </div>
-
-    <div v-if="cartStore.itemsCount !== 0" class="flex flex-col gap-4">
-      <div v-for="p in cartStore.items" :id="p.id">
-        <cart-item
-          @remove="handleRemove"
-          @decrease="handleDecrease"
-          @increase="handleIncrease"
-          variant="elevated"
-          :product="p"
-        />
+    <div class="flex flex-col h-full">
+      <div class="p-4 flex items-center justify-between">
+        <h2 class="text-lg font-semibold">Корзина</h2>
+        <v-btn variant="text" @click="closeDrawer"><X /></v-btn>
       </div>
-    </div>
 
-    <div v-else>dwdw</div>
+      <div class="overflow-auto flex flex-col gap-4">
+        <div v-for="p in cartStore.items" :key="p.id">
+          <cart-item
+            @remove="handleRemove"
+            @decrease="handleDecrease"
+            @increase="handleIncrease"
+            variant="elevated"
+            :product="p"
+          />
+        </div>
+      </div>
+
+      <v-footer class="p-4 flex-1" elevation="3"
+        ><span class="font-bold">Итого: </span> {{ cartStore.getCartPrice }} тг.
+      </v-footer>
+    </div>
   </v-navigation-drawer>
 </template>
 <script lang="ts" setup>
