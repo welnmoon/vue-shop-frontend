@@ -9,3 +9,7 @@ export type ProductFromServer = {
   price: number
   image: string
 }
+
+export type ProductFromServerWithQuantity = ProductFromServer & {
+  quantity: number
+}

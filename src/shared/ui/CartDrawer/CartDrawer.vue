@@ -4,6 +4,7 @@
     temporary
     location="right"
     @update:model-value="emit('update:modelValue', $event)"
+    class="no-scroll"
   >
     <div class="p-4 flex items-center justify-between">
       <h2 class="text-lg font-semibold">Корзина</h2>
@@ -29,6 +30,8 @@
 import { useCartStore } from '@/app/stores/cart'
 import { X } from 'lucide-vue-next'
 import CartItem from '../CartItem/CartItem.vue'
+import { onBeforeUnmount, watch } from 'vue'
+import { lockScroll, unlockScroll } from '@/app/stores/ui'
 
 const props = defineProps<{
   modelValue: boolean
@@ -57,4 +60,20 @@ const handleDecrease = (id: string) => {
 const handleRemove = (id: string) => {
   cartStore.removeItem(id)
 }
+
+watch(
+  () => props.modelValue,
+  (isOpen) => {
+    if (isOpen) {
+      lockScroll()
+    } else {
+      unlockScroll()
+    }
+  },
+  { immediate: true },
+)
+
+onBeforeUnmount(() => {
+  unlockScroll()
+})
 </script>
