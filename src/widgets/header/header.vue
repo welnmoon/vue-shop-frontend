@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useCartStore } from '@/app/stores/cart'
+import { useUIStore } from '@/app/stores/ui'
 import CartDrawer from '@/shared/ui/CartDrawer/CartDrawer.vue'
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
 
 const cartStore = useCartStore()
 
 const { itemsCount } = storeToRefs(cartStore)
 
-const cartDrawerToggle = ref(false)
+const UIStore = useUIStore()
 </script>
 
 <template>
@@ -25,7 +25,7 @@ const cartDrawerToggle = ref(false)
 
         <div class="flex items-center gap-3 md:gap-4 ml-auto">
           <i class="pi pi-user cursor-pointer"></i>
-          <i @click="cartDrawerToggle = true" class="pi pi-shopping-cart cursor-pointer relative"
+          <i @click="UIStore.toggleCartDrawer" class="pi pi-shopping-cart cursor-pointer relative"
             ><div
               class="absolute top-0 w-4 h-4 text-xs -right-2 -translate-y-1/2 bg-red-600 text-white rounded-full flex items-center justify-center"
             >
@@ -37,7 +37,7 @@ const cartDrawerToggle = ref(false)
     </div>
   </header>
 
-  <CartDrawer v-model="cartDrawerToggle" />
+  <CartDrawer v-model="UIStore.isCartDrawerOpen" />
 </template>
 
 <style lang="scss" scoped></style>
