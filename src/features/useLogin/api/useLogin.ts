@@ -14,8 +14,9 @@ export const useLogin = () => {
         credentials: 'include',
         body: JSON.stringify(dto),
       }),
-    onSuccess: async () => {
-      qc.invalidateQueries({ queryKey: ['current-user'] })
+    onSuccess: async (data) => {
+      qc.setQueryData(['current-user'], data)
+      // qc.invalidateQueries({ queryKey: ['current-user'] })
       await router.replace({ name: 'profile' })
     },
   })

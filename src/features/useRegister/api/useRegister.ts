@@ -12,7 +12,8 @@ export const useRegister = () => {
         credentials: 'include',
         body: JSON.stringify(dto),
       }),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      qc.setQueryData(['current-user'], data)
       qc.invalidateQueries({ queryKey: ['current-user'] })
     },
   })

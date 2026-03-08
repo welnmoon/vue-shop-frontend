@@ -5,10 +5,10 @@ import App from './App.vue'
 import router from './providers/router'
 import './styles/style.css'
 import vuetify from '@/plugins/vuetify'
-import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
+import { VueQueryPlugin } from '@tanstack/vue-query'
+import { queryClient } from '../shared/api/queryClient'
 
 const app = createApp(App)
-export const queryClient = new QueryClient()
 
 app.use(createPinia())
 app.use(router)

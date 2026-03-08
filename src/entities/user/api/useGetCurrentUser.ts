@@ -1,4 +1,4 @@
-import { httpClient } from '@/shared/api/httpClient'
+import { httpClient, HttpError } from '@/shared/api/httpClient'
 import { useQuery } from '@tanstack/vue-query'
 import type { PublicUserDto } from '../model/types.api'
 
@@ -9,10 +9,9 @@ export const getCurrentUser = async () => {
       credentials: 'include',
     })
   } catch (e) {
-    if (e instanceof Error && (e.message.includes('401') || e.message.includes('Unauth'))) {
+    if (e instanceof HttpError && e?.status === 401) {
       return null
     }
-
     throw e
   }
 }
@@ -20,7 +19,7 @@ export const getCurrentUser = async () => {
 export const useGetCurrentUser = () => {
   return useQuery({
     queryKey: ['current-user'],
-    staleTime: 7 * 24 * 60 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
     queryFn: getCurrentUser,
   })
 }
