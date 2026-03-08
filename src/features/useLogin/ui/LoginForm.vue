@@ -1,34 +1,36 @@
 <template>
-  <!-- class="flex flex-col gap-2 items-center" -->
   <v-form @submit.prevent="submit">
     <div class="mb-3">
-      <v-text-field
+      <BaseInput
         v-model="values.email"
-        label="Email"
         type="email"
-        variant="outlined"
-        hide-details
+        label="Email"
+        placeholder="Email"
+        :validation-error="validationErrors.email"
       />
-      <ErrorText v-if="validationErrors.email">{{ validationErrors.email }}</ErrorText>
     </div>
 
-    <!-- <input v-model="values.email" type="email" />-->
     <div class="mb-3">
-      <v-text-field
-        label="Пароль"
+      <BaseInput
         v-model="values.password"
         type="password"
-        variant="outlined"
-        hide-details
+        label="Пароль"
+        placeholder="Пароль"
+        :validation-error="validationErrors.password"
       />
-
-      <ErrorText v-if="validationErrors.password">{{ validationErrors.password }}</ErrorText>
     </div>
     <Button variant="outline" :disabled="isPending" type="submit">
       {{ isPending ? 'Вход...' : 'Войти' }}
     </Button>
 
-    <span v-if="error">{{ error }}</span>
+    <p class="mt-3 text-sm">
+      Нет аккаунта?
+      <RouterLink class="text-blue-600 hover:underline" :to="{ name: 'register' }">
+        Зарегистрироваться
+      </RouterLink>
+    </p>
+
+    <ErrorText v-if="error">{{ error }}</ErrorText>
   </v-form>
 </template>
 
@@ -36,6 +38,7 @@
 import Button from '@/shared/ui/Button/Button.vue'
 import { useLoginForm } from '../api/useLoginForm'
 import ErrorText from '@/shared/ui/ErrorText/ErrorText.vue'
+import BaseInput from '@/shared/ui/BaseInput/BaseInput.vue'
 
 const { values, validationErrors, error, isPending, submit } = useLoginForm()
 </script>

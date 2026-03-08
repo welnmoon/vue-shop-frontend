@@ -26,6 +26,11 @@
       {{ isPending ? 'Регистрация...' : 'Зарегистрироваться' }}
     </Button>
 
+    <p class="mt-3 text-sm">
+      Уже есть аккаунт?
+      <RouterLink class="text-blue-600 hover:underline" :to="{ name: 'login' }">Войти</RouterLink>
+    </p>
+
     <ErrorText v-if="error">{{ error }}</ErrorText>
   </v-form>
 </template>

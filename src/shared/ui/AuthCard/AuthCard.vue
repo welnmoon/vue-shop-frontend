@@ -4,8 +4,8 @@
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card class="pa-2" rounded="xl" elevation="10">
           <v-card-item class="pb-2">
-            <v-card-title class="text-h5 font-weight-bold">
-              {{ title }}
+            <v-card-title>
+              <BaseText :text="title" level="h2" />
             </v-card-title>
 
             <v-card-subtitle v-if="subtitle" class="pt-1">
@@ -23,6 +23,8 @@
 </template>
 
 <script setup lang="ts">
+import BaseText from '../BaseHeading/BaseText.vue'
+
 defineProps<{
   title: string
   subtitle?: string

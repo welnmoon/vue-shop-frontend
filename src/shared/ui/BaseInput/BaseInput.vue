@@ -1,17 +1,4 @@
 <template>
-  <!-- <div class="flex gap-0.5 flex-col">
-    <label :for="props.id" v-if="props.label">{{ props.label }}</label>
-    <input
-      :placeholder="placeholder || label"
-      @input="onInput"
-      :id="props.id"
-      :type="props.type || 'text'"
-      :value="props.modelValue"
-      :max="max"
-      :min="min"
-    />
-    <p v-if="props.error">{{ props.label }}</p>
-  </div> -->
   <div class="mb-3">
     <v-text-field
       @input="onInput"
@@ -21,15 +8,17 @@
       variant="outlined"
       hide-details
     />
-    <p v-if="error">{{ error }}</p>
+    <ErrorText v-if="validationError">{{ validationError }}</ErrorText>
   </div>
 </template>
 
 <script setup lang="ts">
+import ErrorText from '../ErrorText/ErrorText.vue'
+
 const props = defineProps<{
   modelValue: string
   label?: string
-  error?: string
+  validationError?: string
   type?: string
   id?: string
   placeholder?: string

@@ -7,7 +7,7 @@ import { RouterView } from 'vue-router'
   <v-app>
     <div class="layout">
       <Header />
-      <main class="main">
+      <main class="max-w-7xl mx-auto">
         <RouterView />
       </main>
     </div>
