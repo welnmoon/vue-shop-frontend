@@ -1,7 +1,5 @@
 import { useLogin } from '@/features/useLogin/api/useLogin'
-import type { LoginDto } from '@/features/useLogin/model/types.api'
 import { useForm } from '@/shared/composables/useLogin'
-import { reactive, ref } from 'vue'
 import z from 'zod'
 
 const loginSchema = z.object({

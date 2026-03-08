@@ -24,6 +24,10 @@ export const httpClient = async <T>(url: string, options: RequestInit): Promise<
 
   if (response.status === 204) return undefined as T
 
+  if (response.status === 401) {
+    throw new HttpError(response.status, 'Unauthorized')
+  }
+
   if (response.ok) {
     return response.json() as Promise<T>
   }

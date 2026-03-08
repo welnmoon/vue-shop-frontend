@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-0.5 flex-col">
+  <!-- <div class="flex gap-0.5 flex-col">
     <label :for="props.id" v-if="props.label">{{ props.label }}</label>
     <input
       :placeholder="placeholder || label"
@@ -11,6 +11,17 @@
       :min="min"
     />
     <p v-if="props.error">{{ props.label }}</p>
+  </div> -->
+  <div class="mb-3">
+    <v-text-field
+      @input="onInput"
+      :v-model="modelValue"
+      :label="label"
+      :type="type"
+      variant="outlined"
+      hide-details
+    />
+    <p v-if="error">{{ error }}</p>
   </div>
 </template>
 
