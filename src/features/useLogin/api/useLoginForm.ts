@@ -4,7 +4,7 @@ import z from 'zod'
 
 const loginSchema = z.object({
   email: z.string().email('Некорректный email'),
-  password: z.string().min(6, 'Минимум 6 символов'),
+  password: z.string().min(8, 'Минимум 8 символов'),
 })
 
 type LoginFormValues = z.infer<typeof loginSchema>

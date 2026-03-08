@@ -30,7 +30,7 @@
       </RouterLink>
     </p>
 
-    <ErrorText v-if="error">{{ error }}</ErrorText>
+    <ErrorText v-if="error">{{ error.message }}</ErrorText>
   </v-form>
 </template>
 

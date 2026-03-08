@@ -31,7 +31,7 @@
       <RouterLink class="text-blue-600 hover:underline" :to="{ name: 'login' }">Войти</RouterLink>
     </p>
 
-    <ErrorText v-if="error">{{ error }}</ErrorText>
+    <ErrorText v-if="error">{{ error.message }}</ErrorText>
   </v-form>
 </template>
 
