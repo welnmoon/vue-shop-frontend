@@ -5,4 +5,10 @@ export const cartApi = {
   addCartItem: {
     url: () => 'cart/items',
   },
+  deleteCartItem: {
+    url: (itemId: string) => `cart/items/${itemId}`,
+  },
+  updateCartItem: {
+    url: (itemId: string) => `cart/items/${itemId}`,
+  },
 }

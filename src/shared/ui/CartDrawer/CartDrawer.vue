@@ -75,6 +75,8 @@ import ErrorText from '../ErrorText/ErrorText.vue'
 import { useAddCartItem } from '@/features/CreateCartItem/api/useAddCartItem'
 import { getCartTotalPrice } from '@/shared/helpers/getCartTotalPrice'
 import type { CartWithItems } from '@/entities/cart/model/types.api'
+import { useDeleteCartItem } from '@/features/DeleteCartItem/api/useDeleteCartItem'
+import { useUpdateCartItem } from '@/features/UpdateCartItem/api/useUpdateCartItem'
 
 const props = defineProps<{
   modelValue: boolean
@@ -83,7 +85,9 @@ const props = defineProps<{
 const cartStore = useCartStore()
 
 const { data: cartFromServer, isLoading, isError, error } = useGetCart()
-const { mutate: addCartItem, isPending } = useAddCartItem()
+// const { mutate: addCartItem, isPending } = useAddCartItem()
+const { mutate: deleteCartItem, isPending: deleteCartItemPending } = useDeleteCartItem()
+const { mutate: updateCartItem, isPending: updateCartItemPending } = useUpdateCartItem()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
@@ -98,15 +102,18 @@ const closeDrawer = () => {
 const handleIncrease = (id: string) => {
   const quantity = cartFromServer.value?.items.find((i) => i.id === id)?.quantity
   // cartStore.increaseItem(id)
-  addCartItem({ productId: id, quantity: quantity ? quantity + 1 : 1 })
+  updateCartItem({ dto: { quantity: quantity ? quantity + 1 : 1 }, itemId: id })
 }
 
 const handleDecrease = (id: string) => {
-  cartStore.decreaseItem(id)
+  const quantity = cartFromServer.value?.items.find((i) => i.id === id)?.quantity
+  // cartStore.decreaseItem(id)
+  updateCartItem({ dto: { quantity: quantity ? quantity - 1 : 1 }, itemId: id })
 }
 
 const handleRemove = (id: string) => {
-  cartStore.removeItem(id)
+  // cartStore.removeItem(id)
+  deleteCartItem({ itemId: id })
 }
 
 const cartTotalPrice = computed(() => {
