@@ -13,6 +13,8 @@
 
     <div>
       <h3>Price</h3>
+      {{ minPrice }} - {{ maxPrice }}
+      {{ productsError }}
       <BaseInput v-model="minPrice" :max="maxPrice" type="number" label="От" placeholder="От" />
       <BaseInput
         v-model="maxPrice"
@@ -29,31 +31,39 @@
 </template>
 
 <script lang="ts" setup>
-import { products } from '@/app/tempData'
+import { useGetProducts } from '@/entities/product/api/useGetProducts'
 import { categories } from '@/entities/product/model/types'
 import { useDebouncedRef } from '@/shared/composables/useDebouncedRef'
 import BaseCheckbox from '@/shared/ui/BaseCheckbox/BaseCheckbox.vue'
 import BaseInput from '@/shared/ui/BaseInput/BaseInput.vue'
 import Button from '@/shared/ui/Button/Button.vue'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
+const {
+  data: products,
+  isLoading: productsIsLoading,
+  isError: productsIsError,
+  error: productsError,
+} = useGetProducts()
 
-const productsMaxPrice = computed(() => products.reduce((max, p) => Math.max(max, p.price), 0))
+const productsMaxPrice = computed(() =>
+  products.value?.reduce((max, p) => Math.max(max, p.price), 0),
+)
 
 const resetFilters = () => {
   router.replace({ query: { maxPrice: productsMaxPrice.value } })
 }
 
-watch(
-  () => route.query.search,
-  (q) => {
-    const v = (Array.isArray(q) ? q[0] : q) ?? ''
-    search.value = v as string
-  },
-)
+// watch(
+//   () => route.query.search,
+//   (q) => {
+//     const v = (Array.isArray(q) ? q[0] : q) ?? ''
+//     search.value = v as string
+//   },
+// )
 
 const category = computed<string[]>({
   get: () => {
@@ -78,7 +88,7 @@ const search = ref(
 
 const debouncedSearch = useDebouncedRef(search, 500)
 
-watch(debouncedSearch, (v) => {
+watch(debouncedSearch, () => {
   router.replace({
     query: {
       ...route.query,
@@ -90,7 +100,7 @@ watch(debouncedSearch, (v) => {
 const minPrice = computed<string>({
   get: () => {
     const v = route.query.minPrice
-    return v === null ? '0' : String(v)
+    return !v ? '0' : String(v)
   },
   set: (v: string) => {
     router.replace({
@@ -105,7 +115,7 @@ const minPrice = computed<string>({
 const maxPrice = computed<string>({
   get: () => {
     const v = route.query.maxPrice
-    return v === null ? String(productsMaxPrice.value) : String(v)
+    return !v ? String(productsMaxPrice.value) : String(v)
   },
   set: (v: string) => {
     router.replace({
@@ -115,5 +125,14 @@ const maxPrice = computed<string>({
       },
     })
   },
+})
+
+watchEffect(() => {
+  const min = Number(minPrice.value)
+  const max = Number(maxPrice.value)
+
+  if (min > max) {
+    minPrice.value = String(max - 1)
+  }
 })
 </script>

@@ -1,12 +1,14 @@
 <template>
   <div class="mb-3">
     <v-text-field
-      @input="onInput"
-      :v-model="modelValue"
+      :model-value="modelValue"
+      @update:model-value="onUpdate"
       :label="label"
       :type="type"
       variant="outlined"
       hide-details
+      :min="min"
+      :max="max"
     />
     <ErrorText v-if="validationError">{{ validationError }}</ErrorText>
   </div>
@@ -30,9 +32,8 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
 
-const onInput = (e: Event) => {
-  const value = (e.target as HTMLInputElement).value
-  console.log('onInput: ', value)
-  emit('update:modelValue', value)
+const onUpdate = (value: string) => {
+  const cleaned = value.replace(/^0+(?=\d)/, '')
+  emit('update:modelValue', cleaned)
 }
 </script>
