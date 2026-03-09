@@ -4,7 +4,6 @@ import { useUIStore } from '@/app/stores/ui'
 import { useGetCart } from '@/entities/cart/api/useGetCart'
 import { getCartItemsQuantity } from '@/shared/helpers/getCartItemsQuantity'
 import CartDrawer from '@/shared/ui/CartDrawer/CartDrawer.vue'
-import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
 // const cartStore = useCartStore()

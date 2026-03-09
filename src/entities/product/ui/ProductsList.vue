@@ -37,7 +37,9 @@
               <RouterLink v-if="p.quantity < 1" :to="`/product/${p.id}`">
                 <v-btn variant="outlined"> Купить </v-btn>
               </RouterLink>
-              <v-btn @click="uiStore.toggleCartDrawer" v-else variant="outlined">В корзину </v-btn>
+              <v-btn @click="uiStore.toggleCartDrawer" v-else variant="outlined"
+                >В корзине {{ p.quantity }}
+              </v-btn>
             </div>
           </template>
         </BaseCard>
@@ -51,10 +53,10 @@ import BaseCard from '@/shared/ui/BaseCard/BaseCard.vue'
 import { useRoute } from 'vue-router'
 import { useGetProducts } from '../api/useGetProducts'
 import { computed } from 'vue'
-import { useCartStore } from '@/app/stores/cart'
 import type { ProductFromServerWithQuantity } from '../model/types.api'
 import { useUIStore } from '@/app/stores/ui'
 import ErrorBlock from '@/shared/ui/ErrorBlock/ErrorBlock.vue'
+import { useGetCart } from '@/entities/cart/api/useGetCart'
 
 const route = useRoute()
 
@@ -65,14 +67,15 @@ const filters = computed(() => ({
   maxPrice: route.query.maxPrice ? Number(route.query.maxPrice) : undefined,
 }))
 const { data: productsFromServer, isLoading, isError, error, refetch } = useGetProducts(filters)
+const { data: cart, isLoading: cartIsLoading } = useGetCart()
 
-const cartStore = useCartStore()
+// const cartStore = useCartStore()
 const uiStore = useUIStore()
 
 const products = computed<ProductFromServerWithQuantity[]>(() =>
   (productsFromServer.value ?? []).map((p) => ({
     ...p,
-    quantity: cartStore.getItemById(p.id)?.quantity ?? 0,
+    quantity: cart.value?.items.find((i) => i.productId === p.id)?.quantity ?? 0,
   })),
 )
 </script>
