@@ -10,7 +10,7 @@
       </div>
     </v-card-item>
 
-    <v-card-actions class="gap-2">
+    <!-- <v-card-actions class="gap-2">
       <div>
         <v-btn @click="emit('decrease', cartItem.id)" icon
           ><MinusSquare :size="20" color="gray"
@@ -21,12 +21,13 @@
         /></v-btn>
         <v-btn @click="emit('remove', cartItem.id)"><Trash :size="20" color="red" /></v-btn>
       </div>
-    </v-card-actions>
+    </v-card-actions> -->
+    <CartItemActions :id="cartItem.id" :quantity="cartItem.quantity" />
   </v-card>
 </template>
 <script lang="ts" setup>
 import type { CartItem } from '@/entities/cart/model/types.api'
-import { MinusSquare, PlusSquare, Trash } from 'lucide-vue-next'
+import CartItemActions from '@/features/UpdateCartItem/ui/CartItemActions.vue'
 import { ref } from 'vue'
 
 const variants = ['elevated', 'flat', 'tonal', 'outlined', 'text', 'plain'] as const

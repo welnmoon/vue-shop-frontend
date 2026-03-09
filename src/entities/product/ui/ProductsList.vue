@@ -34,12 +34,8 @@
           <template #footer>
             <div class="flex justify-between">
               <div class="mt-2 font-semibold text-green-600!">{{ p.price }} $</div>
-              <RouterLink v-if="p.quantity < 1" :to="`/product/${p.id}`">
-                <v-btn variant="outlined"> Купить </v-btn>
-              </RouterLink>
-              <v-btn @click="uiStore.toggleCartDrawer" v-else variant="outlined"
-                >В корзине {{ p.quantity }}
-              </v-btn>
+
+              <ProductCardActions :productId="p.id" :quantity="p.quantity" />
             </div>
           </template>
         </BaseCard>
@@ -57,7 +53,7 @@ import type { ProductFromServerWithQuantity } from '../model/types.api'
 import { useUIStore } from '@/app/stores/ui'
 import ErrorBlock from '@/shared/ui/ErrorBlock/ErrorBlock.vue'
 import { useGetCart } from '@/entities/cart/api/useGetCart'
-import { useCartProductQuantity } from '@/shared/composables/useCartProductQuantity'
+import ProductCardActions from '@/features/UpdateCartItem/ui/ProductCardActions.vue'
 
 const route = useRoute()
 
