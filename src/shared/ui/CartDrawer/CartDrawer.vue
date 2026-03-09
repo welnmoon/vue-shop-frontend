@@ -56,21 +56,25 @@
       </div> -->
 
       <v-footer class="p-4 flex-1 items-center justify-between" elevation="3">
-        <div><span class="font-bold">Итого: </span> {{ cartStore.getCartPrice }} тг.</div>
+        <div><span class="font-bold">Итого: </span> {{ cartTotalPrice }}</div>
         <RouterLink to="/checkout"><Button variant="primary">Оформить заказ</Button> </RouterLink>
       </v-footer>
     </div>
   </v-navigation-drawer>
 </template>
+
 <script lang="ts" setup>
 import { useCartStore } from '@/app/stores/cart'
 import { X } from 'lucide-vue-next'
 import CartItem from '../CartItem/CartItem.vue'
-import { onBeforeUnmount, watch } from 'vue'
+import { computed, onBeforeUnmount, watch } from 'vue'
 import { lockScroll, unlockScroll } from '@/app/stores/ui'
 import Button from '../Button/Button.vue'
 import { useGetCart } from '@/entities/cart/api/useGetCart'
 import ErrorText from '../ErrorText/ErrorText.vue'
+import { useAddCartItem } from '@/features/CreateCartItem/api/useAddCartItem'
+import { getCartTotalPrice } from '@/shared/helpers/getCartTotalPrice'
+import type { CartWithItems } from '@/entities/cart/model/types.api'
 
 const props = defineProps<{
   modelValue: boolean
@@ -79,6 +83,7 @@ const props = defineProps<{
 const cartStore = useCartStore()
 
 const { data: cartFromServer, isLoading, isError, error } = useGetCart()
+const { mutate: addCartItem, isPending } = useAddCartItem()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
@@ -91,7 +96,9 @@ const closeDrawer = () => {
 // cart
 
 const handleIncrease = (id: string) => {
-  cartStore.increaseItem(id)
+  const quantity = cartFromServer.value?.items.find((i) => i.id === id)?.quantity
+  // cartStore.increaseItem(id)
+  addCartItem({ productId: id, quantity: quantity ? quantity + 1 : 1 })
 }
 
 const handleDecrease = (id: string) => {
@@ -101,6 +108,10 @@ const handleDecrease = (id: string) => {
 const handleRemove = (id: string) => {
   cartStore.removeItem(id)
 }
+
+const cartTotalPrice = computed(() => {
+  return getCartTotalPrice(cartFromServer.value)
+})
 
 watch(
   () => props.modelValue,

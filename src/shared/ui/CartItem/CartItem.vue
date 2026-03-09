@@ -12,14 +12,14 @@
 
     <v-card-actions class="gap-2">
       <div>
-        <v-btn @click="emit('decrease', cartItem.id)" icon
+        <v-btn @click="emit('decrease', cartItem.productId)" icon
           ><MinusSquare :size="20" color="gray"
         /></v-btn>
         <span>{{ cartItem.quantity }}</span>
-        <v-btn @click="emit('increase', cartItem.id)" icon
+        <v-btn @click="emit('increase', cartItem.productId)" icon
           ><PlusSquare :size="20" color="gray"
         /></v-btn>
-        <v-btn @click="emit('remove', cartItem.id)"><Trash :size="20" color="red" /></v-btn>
+        <v-btn @click="emit('remove', cartItem.productId)"><Trash :size="20" color="red" /></v-btn>
       </div>
     </v-card-actions>
   </v-card>
