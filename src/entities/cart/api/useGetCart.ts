@@ -7,5 +7,6 @@ export const useGetCart = () => {
   return useQuery({
     queryKey: ['cart'],
     queryFn: async () => httpClient<CartWithItems>(cartApi.getCart.url(), { method: 'GET' }),
+    staleTime: 10_000,
   })
 }

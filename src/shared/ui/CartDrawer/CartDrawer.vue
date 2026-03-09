@@ -11,7 +11,7 @@
         <h2 class="text-lg font-semibold">Корзина</h2>
         <v-btn variant="text" @click="closeDrawer"><X /></v-btn>
       </div>
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-4 flex-1">
         <div class="grid grid-cols-1 gap-4 p-4" v-if="isLoading">
           <div v-for="i in 8" :key="i" class="w-full h-full rounded-lg border p-4 shadow-sm">
             <div class="flex gap-2">
@@ -55,7 +55,7 @@
         </div>
       </div> -->
 
-      <v-footer class="p-4 flex-1 items-center justify-between" elevation="3">
+      <v-footer class="p-4 items-center h-fit justify-between" elevation="3">
         <div><span class="font-bold">Итого: </span> {{ cartTotalPrice }}</div>
         <RouterLink to="/checkout"><Button variant="primary">Оформить заказ</Button> </RouterLink>
       </v-footer>
@@ -82,7 +82,7 @@ const props = defineProps<{
   modelValue: boolean
 }>()
 
-const cartStore = useCartStore()
+// const cartStore = useCartStore()
 
 const { data: cartFromServer, isLoading, isError, error } = useGetCart()
 // const { mutate: addCartItem, isPending } = useAddCartItem()

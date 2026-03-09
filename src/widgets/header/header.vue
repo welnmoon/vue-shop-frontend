@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { useCartStore } from '@/app/stores/cart'
 import { useUIStore } from '@/app/stores/ui'
+import { useGetCart } from '@/entities/cart/api/useGetCart'
+import { getCartItemsQuantity } from '@/shared/helpers/getCartItemsQuantity'
 import CartDrawer from '@/shared/ui/CartDrawer/CartDrawer.vue'
 import { storeToRefs } from 'pinia'
+import { computed } from 'vue'
 
-const cartStore = useCartStore()
+// const cartStore = useCartStore()
 
-const { itemsCount } = storeToRefs(cartStore)
+// const { itemsCount } = storeToRefs(cartStore)
+const { data: cartFromServer, isLoading } = useGetCart()
+const quantity = computed(() => getCartItemsQuantity(cartFromServer.value))
 
 const UIStore = useUIStore()
 </script>
@@ -29,7 +34,7 @@ const UIStore = useUIStore()
             ><div
               class="absolute top-0 w-4 h-4 text-xs -right-2 -translate-y-1/2 bg-red-600 text-white rounded-full flex items-center justify-center"
             >
-              {{ itemsCount }}
+              {{ isLoading ? 0 : quantity }}
             </div></i
           >
         </div>
