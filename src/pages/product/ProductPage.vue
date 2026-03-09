@@ -43,17 +43,6 @@
 
                 <div class="text-h5 font-weight-bold mb-6">{{ product.price }} $</div>
 
-                <!-- <div class="flex flex-wrap gap-2">
-                  <v-btn
-                    color="primary"
-                    size="large"
-                    @click="product && cartStore.addItem(product)"
-                  >
-                    {{ isInCart ? 'Добавлено в корзину' : 'Добавить в корзину' }}
-                  </v-btn>
-
-                  <v-btn v-if="isInCart" variant="outlined"> Перейти в корзину </v-btn>
-                </div> -->
                 <div class="flex flex-wrap gap-2">
                   <v-btn color="primary" size="large" @click="onCartItemCreate">
                     {{ isPending ? 'Добавление...' : 'Добавить в корзину' }}
@@ -72,21 +61,25 @@
 
 <script lang="ts" setup>
 import { useCartStore } from '@/app/stores/cart'
+import { useGetCart } from '@/entities/cart/api/useGetCart'
 import { useGetProduct } from '@/entities/product/api/useGetProduct'
 import { useAddCartItem } from '@/features/CreateCartItem/api/useAddCartItem'
+import { useCartProductQuantity } from '@/shared/composables/useCartProductQuantity'
 import { computed } from 'vue'
 
 const props = defineProps<{ id: string }>()
 
 const { data: product, isLoading, isError } = useGetProduct(props.id)
-const cartStore = useCartStore()
+// const cartStore = useCartStore()
 const { mutate, isPending, isError: addCartItemError } = useAddCartItem()
+
+const { data: cart, isLoading: cartIsLoading } = useGetCart()
+
 const onCartItemCreate = () => {
   if (product.value) {
     mutate({ productId: product.value?.id, quantity: 1 })
   } else alert('Product not found')
 }
 
-const pQuantity = computed(() => cartStore.getItemQuantity(props.id))
-const isInCart = computed(() => (pQuantity.value ? pQuantity.value > 0 : false))
+const { quantity: pQuantity, isInCart } = useCartProductQuantity(props.id)
 </script>

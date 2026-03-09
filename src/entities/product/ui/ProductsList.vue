@@ -57,6 +57,7 @@ import type { ProductFromServerWithQuantity } from '../model/types.api'
 import { useUIStore } from '@/app/stores/ui'
 import ErrorBlock from '@/shared/ui/ErrorBlock/ErrorBlock.vue'
 import { useGetCart } from '@/entities/cart/api/useGetCart'
+import { useCartProductQuantity } from '@/shared/composables/useCartProductQuantity'
 
 const route = useRoute()
 
@@ -72,10 +73,20 @@ const { data: cart, isLoading: cartIsLoading } = useGetCart()
 // const cartStore = useCartStore()
 const uiStore = useUIStore()
 
+const cartQuantityMap = computed(() => {
+  const map = new Map<string, number>()
+
+  for (const item of cart.value?.items ?? []) {
+    map.set(item.productId, item.quantity)
+  }
+
+  return map
+})
+
 const products = computed<ProductFromServerWithQuantity[]>(() =>
   (productsFromServer.value ?? []).map((p) => ({
     ...p,
-    quantity: cart.value?.items.find((i) => i.productId === p.id)?.quantity ?? 0,
+    quantity: useCartProductQuantity(p.id).quantity.value ?? 0,
   })),
 )
 </script>
