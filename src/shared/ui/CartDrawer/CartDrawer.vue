@@ -12,7 +12,7 @@
         <v-btn variant="text" @click="closeDrawer"><X /></v-btn>
       </div>
       <div class="flex flex-col gap-4">
-        <div class="grid grid-cols-1 gap-4 p-4" v-if="true">
+        <div class="grid grid-cols-1 gap-4 p-4" v-if="isLoading">
           <div v-for="i in 8" :key="i" class="w-full h-full rounded-lg border p-4 shadow-sm">
             <div class="flex gap-2">
               <v-skeleton-loader type="image" height="160" class="w-1/3 rounded" />

@@ -1,10 +1,11 @@
 import { httpClient, HttpError } from '@/shared/api/httpClient'
 import { useQuery } from '@tanstack/vue-query'
 import type { PublicUserDto } from '../model/types.api'
+import { userApi } from './api'
 
 export const getCurrentUser = async () => {
   try {
-    return await httpClient<PublicUserDto>('auth/me', {
+    return await httpClient<PublicUserDto>(userApi.getCurrentUser.url(), {
       method: 'GET',
       credentials: 'include',
     })

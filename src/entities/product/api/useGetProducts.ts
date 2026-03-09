@@ -2,6 +2,7 @@ import { httpClient } from '@/shared/api/httpClient'
 import { useQuery } from '@tanstack/vue-query'
 import type { ProductFromServer } from '../model/types.api'
 import { computed, type ComputedRef } from 'vue'
+import { productApi } from './api'
 
 type ProductsFilters = {
   search?: string
@@ -32,7 +33,11 @@ export const useGetProducts = (filters: ComputedRef<ProductsFilters>) => {
         params.append('maxPrice', String(filters.value.maxPrice))
       }
 
-      return httpClient<ProductFromServer[]>(`products?${params}`, { method: 'GET' })
+      const url = params.size
+        ? `${productApi.getProducts.url()}?${params.toString()}`
+        : productApi.getProducts.url()
+
+      return httpClient<ProductFromServer[]>(url, { method: 'GET' })
     },
   })
 }

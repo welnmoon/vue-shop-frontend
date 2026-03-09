@@ -1,7 +1,8 @@
 import { httpClient } from '@/shared/api/httpClient'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import type { LoginDto, PublicUserDto } from '../model/types.api'
 import { useRouter } from 'vue-router'
+import { userApi } from '@/entities/user/api/api'
 
 export const useLogin = () => {
   const qc = useQueryClient()
@@ -9,7 +10,7 @@ export const useLogin = () => {
   return useMutation({
     mutationKey: ['login'],
     mutationFn: async (dto: LoginDto) =>
-      httpClient<PublicUserDto>(`auth/login`, {
+      httpClient<PublicUserDto>(userApi.login.url(), {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(dto),
