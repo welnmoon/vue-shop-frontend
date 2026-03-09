@@ -2,8 +2,8 @@
 import { MinusSquare, PlusSquare, Trash } from 'lucide-vue-next'
 
 const props = defineProps<{
-  id: string
-  quantity: number
+  id?: string
+  quantity?: number
 }>()
 
 const emit = defineEmits<{
@@ -14,7 +14,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="flex items-center gap-2">
+  <div v-if="id && quantity" class="flex items-center gap-2">
     <v-btn variant="flat" icon @click="emit('decrease', id)">
       <MinusSquare :size="20" />
     </v-btn>

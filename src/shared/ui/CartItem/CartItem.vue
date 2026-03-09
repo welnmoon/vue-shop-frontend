@@ -22,7 +22,13 @@
         <v-btn @click="emit('remove', cartItem.id)"><Trash :size="20" color="red" /></v-btn>
       </div>
     </v-card-actions> -->
-    <CartItemActions :id="cartItem.id" :quantity="cartItem.quantity" />
+    <CartItemActions
+      @increase="emit('increase', cartItem.id)"
+      @decrease="emit('decrease', cartItem.id)"
+      @remove="emit('remove', cartItem.id)"
+      :id="cartItem.id"
+      :quantity="cartItem.quantity"
+    />
   </v-card>
 </template>
 <script lang="ts" setup>

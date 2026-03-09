@@ -55,10 +55,10 @@
         </div>
       </div> -->
 
-      <v-footer class="p-4 items-center h-fit justify-between" elevation="3">
+      <div class="p-4 items-center h-fit justify-between" elevation="3">
         <div><span class="font-bold">Итого: </span> {{ cartTotalPrice }}</div>
         <RouterLink to="/checkout"><Button variant="primary">Оформить заказ</Button> </RouterLink>
-      </v-footer>
+      </div>
     </div>
   </v-navigation-drawer>
 </template>
@@ -74,6 +74,7 @@ import ErrorText from '../ErrorText/ErrorText.vue'
 import { useDeleteCartItem } from '@/features/DeleteCartItem/api/useDeleteCartItem'
 import { useUpdateCartItem } from '@/features/UpdateCartItem/api/useUpdateCartItem'
 import { getCartTotalPrice } from '@/shared/helpers/getCartTotalPrice'
+import { useCartProductActions } from '@/shared/composables/useCartProductActions'
 
 const props = defineProps<{
   modelValue: boolean
@@ -82,9 +83,7 @@ const props = defineProps<{
 // const cartStore = useCartStore()
 
 const { data: cartFromServer, isLoading, isError, error } = useGetCart()
-const { mutate: deleteCartItem, isPending: deleteCartItemPending } = useDeleteCartItem()
-const { mutate: updateCartItem, isPending: updateCartItemPending } = useUpdateCartItem()
-
+const { handleDecrease, handleIncrease, handleRemove } = useCartProductActions(cartFromServer)
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
 }>()
@@ -93,19 +92,19 @@ const closeDrawer = () => {
   emit('update:modelValue', false)
 }
 
-const handleIncrease = (id: string) => {
-  const quantity = cartFromServer.value?.items.find((i) => i.id === id)?.quantity
-  updateCartItem({ dto: { quantity: quantity ? quantity + 1 : 1 }, itemId: id })
-}
+// const handleIncrease = (id: string) => {
+//   const quantity = cartFromServer.value?.items.find((i) => i.id === id)?.quantity
+//   updateCartItem({ dto: { quantity: quantity ? quantity + 1 : 1 }, itemId: id })
+// }
 
-const handleDecrease = (id: string) => {
-  const quantity = cartFromServer.value?.items.find((i) => i.id === id)?.quantity
-  updateCartItem({ dto: { quantity: quantity ? quantity - 1 : 1 }, itemId: id })
-}
+// const handleDecrease = (id: string) => {
+//   const quantity = cartFromServer.value?.items.find((i) => i.id === id)?.quantity
+//   updateCartItem({ dto: { quantity: quantity ? quantity - 1 : 1 }, itemId: id })
+// }
 
-const handleRemove = (id: string) => {
-  deleteCartItem({ itemId: id })
-}
+// const handleRemove = (id: string) => {
+//   deleteCartItem({ itemId: id })
+// }
 
 const cartTotalPrice = computed(() => {
   return getCartTotalPrice(cartFromServer.value)
