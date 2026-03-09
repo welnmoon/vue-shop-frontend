@@ -1,5 +1,5 @@
 import { useLogin } from '@/features/useLogin/api/useLogin'
-import { useForm } from '@/shared/composables/useLogin'
+import { useForm } from '@/shared/composables/useForm'
 import z from 'zod'
 
 const loginSchema = z.object({

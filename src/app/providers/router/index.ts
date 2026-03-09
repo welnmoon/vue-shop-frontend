@@ -7,6 +7,7 @@ import ProductPage from '@/pages/product/ProductPage.vue'
 import RegisterPage from '@/pages/register/RegisterPage.vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { queryClient } from '@/shared/api/queryClient'
+import CheckoutPage from '@/pages/checkout/CheckoutPage.vue'
 
 const routes: RouteRecordRaw[] = [
   { path: '/', name: 'home', component: MainPage },
@@ -19,6 +20,11 @@ const routes: RouteRecordRaw[] = [
     name: 'profile',
     component: ProfilePage,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/checkout',
+    name: 'checkout',
+    component: CheckoutPage,
   },
 ]
 

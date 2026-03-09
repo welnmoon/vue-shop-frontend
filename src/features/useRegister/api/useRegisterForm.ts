@@ -1,5 +1,5 @@
 import { useRegister } from '@/features/useRegister/api/useRegister'
-import { useForm } from '@/shared/composables/useLogin'
+import { useForm } from '@/shared/composables/useForm'
 import z from 'zod'
 
 const registerSchema = z.object({

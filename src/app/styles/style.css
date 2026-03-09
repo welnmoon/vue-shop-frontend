@@ -2,10 +2,6 @@
 @import 'primeicons/primeicons.css';
 
 @layer base {
-  * {
-    color: rgb(35, 50, 63);
-  }
-
   h1 {
     font-size: 2rem;
     font-weight: 700;
