@@ -13,7 +13,13 @@ type ProductsFilters = {
 
 export const useGetProducts = (filters: ComputedRef<ProductsFilters>) => {
   return useQuery({
-    queryKey: computed(() => ['products', filters]),
+    queryKey: computed(() => [
+      'products',
+      filters.value.search,
+      filters.value.category,
+      filters.value.minPrice,
+      filters.value.maxPrice,
+    ]),
     queryFn: async () => {
       const params = new URLSearchParams()
 
@@ -22,7 +28,13 @@ export const useGetProducts = (filters: ComputedRef<ProductsFilters>) => {
       }
 
       if (filters.value.category) {
-        filters.value.category.forEach((c) => params.append('category', c))
+        if (typeof filters.value.category === 'string') {
+          params.append('category', filters.value.category)
+        }
+
+        if (Array.isArray(filters.value.category)) {
+          filters.value.category.forEach((c) => params.append('category', c))
+        }
       }
 
       if (filters.value.minPrice) {

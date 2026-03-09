@@ -86,7 +86,7 @@ const cartQuantityMap = computed(() => {
 const products = computed<ProductFromServerWithQuantity[]>(() =>
   (productsFromServer.value ?? []).map((p) => ({
     ...p,
-    quantity: useCartProductQuantity(p.id).quantity.value ?? 0,
+    quantity: cartQuantityMap.value.get(p.id) ?? 0,
   })),
 )
 </script>
