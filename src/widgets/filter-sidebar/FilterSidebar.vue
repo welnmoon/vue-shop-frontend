@@ -13,8 +13,6 @@
 
     <div>
       <h3>Price</h3>
-      {{ minPrice }} - {{ maxPrice }}
-      {{ productsError }}
       <BaseInput v-model="minPrice" :max="maxPrice" type="number" label="От" placeholder="От" />
       <BaseInput
         v-model="maxPrice"
@@ -34,6 +32,7 @@
 import { useGetProducts } from '@/entities/product/api/useGetProducts'
 import { categories } from '@/entities/product/model/types'
 import { useDebouncedRef } from '@/shared/composables/useDebouncedRef'
+import { normalizePrice } from '@/shared/helpers/normalizePrice'
 import BaseCheckbox from '@/shared/ui/BaseCheckbox/BaseCheckbox.vue'
 import BaseInput from '@/shared/ui/BaseInput/BaseInput.vue'
 import Button from '@/shared/ui/Button/Button.vue'
@@ -49,8 +48,8 @@ const {
   error: productsError,
 } = useGetProducts()
 
-const productsMaxPrice = computed(() =>
-  products.value?.reduce((max, p) => Math.max(max, p.price), 0),
+const productsMaxPrice = computed(
+  () => products.value?.reduce((max, p) => Math.max(max, p.price), 0) ?? 0,
 )
 
 const resetFilters = () => {
@@ -100,13 +99,23 @@ watch(debouncedSearch, () => {
 const minPrice = computed<string>({
   get: () => {
     const v = route.query.minPrice
-    return !v ? '0' : String(v)
+    const cleaned = normalizePrice(!v ? '0' : String(v))
+
+    return cleaned
   },
   set: (v: string) => {
+    const cleaned = normalizePrice(v || '0')
+    const currentMax = Number(maxPrice.value)
+
+    let nextMinPrice = Number(cleaned || 0)
+    if (nextMinPrice > currentMax) {
+      nextMinPrice = currentMax
+    }
+
     router.replace({
       query: {
         ...route.query,
-        minPrice: v,
+        minPrice: String(nextMinPrice),
       },
     })
   },
@@ -115,24 +124,26 @@ const minPrice = computed<string>({
 const maxPrice = computed<string>({
   get: () => {
     const v = route.query.maxPrice
-    return !v ? String(productsMaxPrice.value) : String(v)
+    const cleaned = normalizePrice(!v ? String(productsMaxPrice.value) : String(v))
+
+    return cleaned
   },
   set: (v: string) => {
+    const cleaned = normalizePrice(v || String(productsMaxPrice.value))
+    const currentMinPrice = Number(minPrice.value)
+
+    let nextMaxPrice = Number(cleaned)
+
+    if (nextMaxPrice > currentMinPrice) {
+      nextMaxPrice = productsMaxPrice.value
+    }
+
     router.replace({
       query: {
         ...route.query,
-        maxPrice: v,
+        maxPrice: String(nextMaxPrice),
       },
     })
   },
-})
-
-watchEffect(() => {
-  const min = Number(minPrice.value)
-  const max = Number(maxPrice.value)
-
-  if (min > max) {
-    minPrice.value = String(max - 1)
-  }
 })
 </script>
