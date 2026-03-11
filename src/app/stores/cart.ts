@@ -1,11 +1,8 @@
-import type { Product } from '@/entities/product/model/types'
 import { defineStore } from 'pinia'
+import type { LocalCartItem } from './types'
+import type { Product } from '@/entities/product/model/types.api'
 
-export type CartItem = Product & {
-  quantity: number
-}
-
-export type CartState = CartItem[]
+export type CartState = LocalCartItem[]
 
 function loadCart(): CartState {
   const raw = localStorage.getItem('cart')
@@ -20,7 +17,7 @@ function loadCart(): CartState {
 }
 
 function findCartItem(items: CartState, id: string) {
-  return items.find((item) => item.id === id)
+  return items.find((item) => item.productId === id)
 }
 
 export const useCartStore = defineStore('cart', {
@@ -52,13 +49,13 @@ export const useCartStore = defineStore('cart', {
       if (existing) {
         this.increaseItem(product.id)
       } else {
-        this.items.push({ ...product, quantity: 1 })
+        this.items.push({ ...product, quantity: 1, productId: product.id })
         this.saveCart()
       }
     },
 
     removeItem(id: string) {
-      this.items = this.items.filter((item) => item.id !== id)
+      this.items = this.items.filter((item) => item.productId !== id)
 
       this.saveCart()
     },

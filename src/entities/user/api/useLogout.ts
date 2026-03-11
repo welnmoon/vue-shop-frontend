@@ -18,6 +18,8 @@ export const useLogout = () => {
     mutationFn: logout,
     onSuccess: async () => {
       queryClient.setQueryData(['current-user'], null)
+      queryClient.setQueryData(['cart'], undefined)
+      queryClient.removeQueries({ queryKey: ['cart'] })
       await router.replace({ name: 'login' })
     },
   })

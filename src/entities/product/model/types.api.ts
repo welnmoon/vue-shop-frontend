@@ -1,8 +1,8 @@
 import type { ProductCategories } from './types'
 
-export type ProductFromServer = {
+export type Product = {
   id: string
-  createdAt: Date
+  createdAt: string
   category: ProductCategories
   title: string
   description: string
@@ -10,6 +10,6 @@ export type ProductFromServer = {
   image: string
 }
 
-export type ProductFromServerWithQuantity = ProductFromServer & {
+export type ProductFromServerWithQuantity = Product & {
   quantity: number
 }

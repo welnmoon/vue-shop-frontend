@@ -1,12 +1,13 @@
 import { httpClient } from '@/shared/api/httpClient'
 import { useQuery } from '@tanstack/vue-query'
-import type { ProductFromServer } from '../model/types.api'
+import type { Product } from '../model/types.api'
 import { computed, type ComputedRef } from 'vue'
 import { productApi } from './api'
+import type { LocationQueryValue } from 'vue-router'
 
 type ProductsFilters = {
   search?: string
-  category?: string[]
+  category?: LocationQueryValue[] | string
   minPrice?: number
   maxPrice?: number
 }
@@ -28,7 +29,9 @@ export const useGetProducts = (filters?: ComputedRef<ProductsFilters>) => {
           }
 
           if (Array.isArray(filters.value.category)) {
-            filters.value.category.forEach((c) => params.append('category', c))
+            filters.value.category.forEach((c) =>
+              params.append('category', typeof c === 'string' ? c : ''),
+            )
           }
         }
 
@@ -45,7 +48,7 @@ export const useGetProducts = (filters?: ComputedRef<ProductsFilters>) => {
         ? `${productApi.getProducts.url()}?${params.toString()}`
         : productApi.getProducts.url()
 
-      return httpClient<ProductFromServer[]>(url, { method: 'GET' })
+      return httpClient<Product[]>(url, { method: 'GET' })
     },
   })
 }

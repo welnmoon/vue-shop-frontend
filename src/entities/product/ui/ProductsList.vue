@@ -22,7 +22,7 @@
       <ErrorBlock :error="error" :showRetry="true" @retry="refetch" />
     </div>
     <div v-else class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
-      <article class="h-full" v-for="p in products ?? []" :key="p.id">
+      <article v-for="p in products" :key="p.id" class="h-full">
         <BaseCard>
           <template #header>
             <img :src="p.image" :alt="p.title" class="w-full h-40 object-contain rounded" />
@@ -33,7 +33,7 @@
 
           <template #footer>
             <div class="flex justify-between">
-              <div class="mt-2 font-semibold text-green-600!">{{ p.price }} $</div>
+              <div class="mt-2 font-semibold text-green-600">{{ p.price }} $</div>
 
               <ProductCardActions :productId="p.id" :quantity="p.quantity" />
             </div>
@@ -50,24 +50,33 @@ import { useRoute } from 'vue-router'
 import { useGetProducts } from '../api/useGetProducts'
 import { computed } from 'vue'
 import type { ProductFromServerWithQuantity } from '../model/types.api'
-import { useUIStore } from '@/app/stores/ui'
 import ErrorBlock from '@/shared/ui/ErrorBlock/ErrorBlock.vue'
 import { useGetCart } from '@/entities/cart/api/useGetCart'
 import ProductCardActions from '@/features/UpdateCartItem/ui/ProductCardActions.vue'
 
 const route = useRoute()
 
-const filters = computed(() => ({
-  search: route.query.search as string | undefined,
-  category: route.query.category as string[] | undefined,
-  minPrice: route.query.minPrice ? Number(route.query.minPrice) : undefined,
-  maxPrice: route.query.maxPrice ? Number(route.query.maxPrice) : undefined,
-}))
-const { data: productsFromServer, isLoading, isError, error, refetch } = useGetProducts(filters)
-const { data: cart, isLoading: cartIsLoading } = useGetCart()
+const filters = computed(() => {
+  const categoryQuery = route.query.category
+  const searchQuery = route.query.search
+  const minPriceQuery = route.query.minPrice
+  const maxPriceQuery = route.query.maxPrice
 
-// const cartStore = useCartStore()
-const uiStore = useUIStore()
+  return {
+    search: typeof searchQuery === 'string' ? searchQuery : undefined,
+    category: Array.isArray(categoryQuery)
+      ? categoryQuery
+      : typeof categoryQuery === 'string'
+        ? [categoryQuery]
+        : undefined,
+    minPrice:
+      minPriceQuery && typeof minPriceQuery === 'string' ? Number(minPriceQuery) : undefined,
+    maxPrice:
+      maxPriceQuery && typeof maxPriceQuery === 'string' ? Number(maxPriceQuery) : undefined,
+  }
+})
+const { data: productsFromServer, isLoading, isError, error, refetch } = useGetProducts(filters)
+const { data: cart } = useGetCart()
 
 const cartQuantityMap = computed(() => {
   const map = new Map<string, number>()

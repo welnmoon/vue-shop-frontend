@@ -34,7 +34,7 @@ export const useForm = <T extends object>({
     for (const issue of res.error.issues) {
       const field = issue.path[0]
 
-      if (field === 'email' || field === 'password') {
+      if (typeof field === 'string') {
         validationErrors[field as keyof T] = issue.message
       }
     }

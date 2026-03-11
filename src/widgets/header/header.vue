@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { useCartStore } from '@/app/stores/cart'
 import { useUIStore } from '@/app/stores/ui'
 import { useGetCart } from '@/entities/cart/api/useGetCart'
+import { useCart } from '@/shared/composables/useCart'
 import { getCartItemsQuantity } from '@/shared/helpers/getCartItemsQuantity'
 import CartDrawer from '@/shared/ui/CartDrawer/CartDrawer.vue'
 import { computed } from 'vue'
 
-// const cartStore = useCartStore()
+const { totalCount, isLoading } = useCart()
 
-// const { itemsCount } = storeToRefs(cartStore)
-const { data: cartFromServer, isLoading } = useGetCart()
-const quantity = computed(() => getCartItemsQuantity(cartFromServer.value))
-
-const UIStore = useUIStore()
+const uiStore = useUIStore()
 </script>
 
 <template>
@@ -29,19 +25,18 @@ const UIStore = useUIStore()
 
         <div class="flex items-center gap-3 md:gap-4 ml-auto">
           <RouterLink to="/login"><i class="pi pi-user cursor-pointer"></i></RouterLink>
-          <i @click="UIStore.toggleCartDrawer" class="pi pi-shopping-cart cursor-pointer relative"
-            ><div
+          <button type="button" class="relative cursor-pointer" @click="uiStore.toggleCartDrawer">
+            <i class="pi pi-shopping-cart"></i>
+            <div
               class="absolute top-0 w-4 h-4 text-xs -right-2 -translate-y-1/2 bg-red-600 text-white rounded-full flex items-center justify-center"
             >
-              {{ isLoading ? 0 : quantity }}
-            </div></i
-          >
+              {{ isLoading ? 0 : totalCount }}
+            </div>
+          </button>
         </div>
       </div>
     </div>
   </header>
 
-  <CartDrawer v-model="UIStore.isCartDrawerOpen" />
+  <CartDrawer v-model="uiStore.isCartDrawerOpen" />
 </template>
-
-<style lang="scss" scoped></style>

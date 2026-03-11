@@ -1,13 +1,3 @@
-export type Product = {
-  id: string
-  title: string
-  description: string
-  price: number
-  image: string
-  category: ProductCategories
-  createdAt: Date
-}
-
 export const categories = [
   'Electronics',
   'Clothing',

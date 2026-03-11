@@ -44,8 +44,8 @@
                 <div class="text-h5 font-weight-bold mb-6">{{ product.price }} $</div>
 
                 <div class="flex flex-wrap gap-2">
-                  <v-btn color="primary" v-if="!isInCart" size="large" @click="onCartItemCreate">
-                    {{ isPending ? 'Добавление...' : 'Добавить в корзину' }}
+                  <v-btn color="primary" v-if="!isInCart" size="large" @click="addItem">
+                    {{ addItemPending ? 'Добавление...' : 'Добавить в корзину' }}
                   </v-btn>
 
                   <v-btn v-if="isInCart" @click="uiStore.toggleCartDrawer" variant="outlined">
@@ -53,11 +53,10 @@
                   </v-btn>
                   <div v-if="isInCart">
                     <cart-item-actions
-                      :id="productCartId?.id"
-                      :quantity="productCartId?.quantity"
-                      @increase="handleIncrease"
-                      @decrease="handleDecrease"
-                      @remove="handleRemove"
+                      :item="cartItem"
+                      @increase="increaseItem"
+                      @decrease="decreaseItem"
+                      @remove="removeItem"
                     />
                   </div>
                 </div>
@@ -72,34 +71,21 @@
 
 <script lang="ts" setup>
 import { useUIStore } from '@/app/stores/ui'
-import { useGetCart } from '@/entities/cart/api/useGetCart'
 import { useGetProduct } from '@/entities/product/api/useGetProduct'
-import { useAddCartItem } from '@/features/CreateCartItem/api/useAddCartItem'
 import CartItemActions from '@/features/UpdateCartItem/ui/CartItemActions.vue'
-import { useCartProductActions } from '@/shared/composables/useCartProductActions'
+import { useCart } from '@/shared/composables/useCart'
+
 import { useCartProductQuantity } from '@/shared/composables/useCartProductQuantity'
 import { computed } from 'vue'
 
 const props = defineProps<{ id: string }>()
 
 const { data: product, isLoading, isError } = useGetProduct(props.id)
-// const cartStore = useCartStore()
-const { mutate, isPending, isError: addCartItemError } = useAddCartItem()
 
-const { data: cart } = useGetCart()
-
-const productCartId = computed(() =>
-  cart.value?.items.find((item) => item.productId === product.value?.id),
-)
-
-const { handleDecrease, handleIncrease, handleRemove } = useCartProductActions(cart)
+const { increaseItem, decreaseItem, removeItem, getItem, addItemPending, addItem } = useCart()
+const cartItem = computed(() => getItem(product.value))
 
 const uiStore = useUIStore()
-const onCartItemCreate = () => {
-  if (product.value) {
-    mutate({ productId: product.value?.id, quantity: 1 })
-  } else alert('Product not found')
-}
 
 const { quantity: pQuantity, isInCart } = useCartProductQuantity(props.id)
 </script>

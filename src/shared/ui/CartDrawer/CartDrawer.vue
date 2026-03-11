@@ -32,31 +32,20 @@
           </div>
         </div>
         <ErrorText v-else-if="isError" :text="error?.message" />
-        <div v-for="p in cartFromServer?.items" :key="p.id">
+        <div v-for="p in items" :key="p.productId">
           <cart-item
-            @remove="handleRemove"
-            @decrease="handleDecrease"
-            @increase="handleIncrease"
+            @remove="removeItem"
+            @decrease="decreaseItem"
+            @increase="increaseItem"
             variant="elevated"
             :cart-item="p"
           />
         </div>
       </div>
-      <!-- Локальный -->
-      <!-- <div class="overflow-auto flex flex-col gap-4">
-        <div v-for="p in cartStore.items" :key="p.id">
-          <cart-item
-            @remove="handleRemove"
-            @decrease="handleDecrease"
-            @increase="handleIncrease"
-            variant="elevated"
-            :cart-item="p"
-          />
-        </div>
-      </div> -->
 
       <div class="p-4 items-center h-fit justify-between" elevation="3">
-        <div><span class="font-bold">Итого: </span> {{ cartTotalPrice }}</div>
+        <div><span class="font-bold">Итоговая сумма: </span> {{ totalPrice }}</div>
+        <div><span class="font-bold">Итого товаров: </span> {{ totalCount }}</div>
         <RouterLink to="/checkout"><Button variant="primary">Оформить заказ</Button> </RouterLink>
       </div>
     </div>
@@ -71,44 +60,25 @@ import { lockScroll, unlockScroll } from '@/app/stores/ui'
 import Button from '../Button/Button.vue'
 import { useGetCart } from '@/entities/cart/api/useGetCart'
 import ErrorText from '../ErrorText/ErrorText.vue'
-import { useDeleteCartItem } from '@/features/DeleteCartItem/api/useDeleteCartItem'
-import { useUpdateCartItem } from '@/features/UpdateCartItem/api/useUpdateCartItem'
 import { getCartTotalPrice } from '@/shared/helpers/getCartTotalPrice'
-import { useCartProductActions } from '@/shared/composables/useCartProductActions'
+
+import { useCart } from '@/shared/composables/useCart'
 
 const props = defineProps<{
   modelValue: boolean
 }>()
-
-// const cartStore = useCartStore()
+const { items, totalCount, totalPrice, decreaseItem, increaseItem, removeItem } = useCart()
 
 const { data: cartFromServer, isLoading, isError, error } = useGetCart()
-const { handleDecrease, handleIncrease, handleRemove } = useCartProductActions(cartFromServer)
+
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
 }>()
 
+// drawer - UI
 const closeDrawer = () => {
   emit('update:modelValue', false)
 }
-
-// const handleIncrease = (id: string) => {
-//   const quantity = cartFromServer.value?.items.find((i) => i.id === id)?.quantity
-//   updateCartItem({ dto: { quantity: quantity ? quantity + 1 : 1 }, itemId: id })
-// }
-
-// const handleDecrease = (id: string) => {
-//   const quantity = cartFromServer.value?.items.find((i) => i.id === id)?.quantity
-//   updateCartItem({ dto: { quantity: quantity ? quantity - 1 : 1 }, itemId: id })
-// }
-
-// const handleRemove = (id: string) => {
-//   deleteCartItem({ itemId: id })
-// }
-
-const cartTotalPrice = computed(() => {
-  return getCartTotalPrice(cartFromServer.value)
-})
 
 watch(
   () => props.modelValue,
