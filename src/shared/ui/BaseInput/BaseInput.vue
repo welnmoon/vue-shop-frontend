@@ -33,7 +33,6 @@ const emit = defineEmits<{
 }>()
 
 const onUpdate = (value: string) => {
-  const cleaned = value.replace(/^0+(?=\d)/, '')
-  emit('update:modelValue', cleaned)
+  emit('update:modelValue', value)
 }
 </script>
