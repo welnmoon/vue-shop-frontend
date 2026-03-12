@@ -1,31 +1,24 @@
 <template>
-  <input
-    type="checkbox"
-    :value="props.value"
-    :checked="props.modelValue.includes(props.value)"
-    @change="onChange"
-    class="mr-1"
-  />
+  <input type="checkbox" :checked="props.modelValue" @change="onChange" class="mr-1" />
   <slot />
+  <error-text v-if="props.error" :text="props.error" />
 </template>
 
 <script setup lang="ts">
+import ErrorText from '../ErrorText/ErrorText.vue'
+
 const props = defineProps<{
-  modelValue: string[]
-  value: string
+  modelValue?: boolean
+  error?: string
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string[]): void
+  (e: 'update:modelValue', value: boolean): void
 }>()
 
 const onChange = (e: Event) => {
   const checked = (e.target as HTMLInputElement).checked
 
-  const next = checked
-    ? [...props.modelValue, props.value]
-    : props.modelValue.filter((x) => x !== props.value)
-
-  emit('update:modelValue', next)
+  emit('update:modelValue', checked)
 }
 </script>

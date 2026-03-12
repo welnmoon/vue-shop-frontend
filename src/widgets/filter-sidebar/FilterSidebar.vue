@@ -6,7 +6,7 @@
       <label class="block text-lg font-medium">Categories</label>
       <div class="flex flex-col gap-1">
         <div v-for="c in categories" :key="c">
-          <BaseCheckbox :value="c" v-model="category">{{ c }}</BaseCheckbox>
+          <BaseCheckboxMultiple :value="c" v-model="category">{{ c }}</BaseCheckboxMultiple>
         </div>
       </div>
     </div>
@@ -33,20 +33,15 @@ import { useGetProducts } from '@/entities/product/api/useGetProducts'
 import { categories } from '@/entities/product/model/types'
 import { useDebouncedRef } from '@/shared/composables/useDebouncedRef'
 import { normalizePrice } from '@/shared/helpers/normalizePrice'
-import BaseCheckbox from '@/shared/ui/BaseCheckbox/BaseCheckbox.vue'
+import BaseCheckboxMultiple from '@/shared/ui/BaseCheckboxMultiple/BaseCheckboxMultiple.vue'
 import BaseInput from '@/shared/ui/BaseInput/BaseInput.vue'
 import Button from '@/shared/ui/Button/Button.vue'
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
-const {
-  data: products,
-  isLoading: productsIsLoading,
-  isError: productsIsError,
-  error: productsError,
-} = useGetProducts()
+const { data: products } = useGetProducts()
 
 const productsMaxPrice = computed(
   () => products.value?.reduce((max, p) => Math.max(max, p.price), 0) ?? 0,
@@ -55,14 +50,6 @@ const productsMaxPrice = computed(
 const resetFilters = () => {
   router.replace({ query: { maxPrice: productsMaxPrice.value } })
 }
-
-// watch(
-//   () => route.query.search,
-//   (q) => {
-//     const v = (Array.isArray(q) ? q[0] : q) ?? ''
-//     search.value = v as string
-//   },
-// )
 
 const category = computed<string[]>({
   get: () => {

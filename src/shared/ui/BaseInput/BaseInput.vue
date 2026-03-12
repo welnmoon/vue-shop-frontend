@@ -9,6 +9,10 @@
       hide-details
       :min="min"
       :max="max"
+      :id="id"
+      :placeholder="placeholder"
+      density="compact"
+      v-bind="$attrs"
     />
     <ErrorText v-if="validationError">{{ validationError }}</ErrorText>
   </div>
@@ -16,9 +20,10 @@
 
 <script setup lang="ts">
 import ErrorText from '../ErrorText/ErrorText.vue'
+defineOptions({ inheritAttrs: false })
 
 const props = defineProps<{
-  modelValue: string
+  modelValue?: string
   label?: string
   validationError?: string
   type?: string
