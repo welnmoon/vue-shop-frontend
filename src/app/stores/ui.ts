@@ -1,10 +1,30 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+type DismissedMap = Record<string, boolean>
+const dismissedBlockKey = 'dismissed-ui-blocks'
+
+const loadDismissedBlocks = (): DismissedMap => {
+  const raw = localStorage.getItem(dismissedBlockKey)
+
+  if (!raw) return {}
+
+  try {
+    return JSON.parse(raw)
+  } catch {
+    return {}
+  }
+}
+
 export const useUIStore = defineStore('ui', {
   state: () => ({
     isCartDrawerOpen: false,
+    dismissedBlocks: loadDismissedBlocks(),
   }),
+
+  getters: {
+    isBlockDismissed: (state) => (id: string) => !!state.dismissedBlocks[id],
+  },
 
   actions: {
     openCartDrawer() {
@@ -18,6 +38,26 @@ export const useUIStore = defineStore('ui', {
     },
     toggleCartDrawer() {
       this.isCartDrawerOpen ? this.closeCartDrawer() : this.openCartDrawer()
+    },
+
+    // dismissed blocks
+    saveDismissed() {
+      localStorage.setItem(dismissedBlockKey, JSON.stringify(this.dismissedBlocks))
+    },
+
+    dismissBlock(id: string) {
+      this.dismissedBlocks[id] = true
+      this.saveDismissed()
+    },
+
+    resetBlock(id: string) {
+      delete this.dismissedBlocks[id]
+      this.saveDismissed()
+    },
+
+    resetAllDismissed() {
+      this.dismissedBlocks = {}
+      this.saveDismissed()
     },
   },
 })

@@ -112,5 +112,6 @@ export const useCart = () => {
     deleteItemPending,
     updateItemPending,
     getItem,
+    isAuthenticated,
   }
 }

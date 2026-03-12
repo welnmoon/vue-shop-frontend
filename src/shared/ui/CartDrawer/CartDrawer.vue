@@ -31,7 +31,12 @@
             </div>
           </div>
         </div>
-        <ErrorText v-else-if="isError" :text="error?.message" />
+        <InfoBlock
+          v-else-if="!isAuthenticated"
+          text="Войдите в аккаунт чтобы сохранить свою корзину"
+          action-text="Перейти к логину"
+          action-to="/login"
+        />
         <div v-for="p in items" :key="p.productId">
           <cart-item
             @remove="removeItem"
@@ -43,7 +48,10 @@
         </div>
       </div>
 
-      <div class="p-4 items-center h-fit justify-between" elevation="3">
+      <div
+        class="p-4 items-center h-fit justify-between shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)]"
+        elevation="3"
+      >
         <div><span class="font-bold">Итоговая сумма: </span> {{ totalPrice }}</div>
         <div><span class="font-bold">Итого товаров: </span> {{ totalCount }}</div>
         <RouterLink to="/checkout"><Button variant="primary">Оформить заказ</Button> </RouterLink>
@@ -55,21 +63,26 @@
 <script lang="ts" setup>
 import { X } from 'lucide-vue-next'
 import CartItem from '../CartItem/CartItem.vue'
-import { computed, onBeforeUnmount, watch } from 'vue'
+import { onBeforeUnmount, watch } from 'vue'
 import { lockScroll, unlockScroll } from '@/app/stores/ui'
 import Button from '../Button/Button.vue'
-import { useGetCart } from '@/entities/cart/api/useGetCart'
-import ErrorText from '../ErrorText/ErrorText.vue'
-import { getCartTotalPrice } from '@/shared/helpers/getCartTotalPrice'
+import InfoBlock from '../InfoBlock/InfoBlock.vue'
 
 import { useCart } from '@/shared/composables/useCart'
 
 const props = defineProps<{
   modelValue: boolean
 }>()
-const { items, totalCount, totalPrice, decreaseItem, increaseItem, removeItem } = useCart()
-
-const { data: cartFromServer, isLoading, isError, error } = useGetCart()
+const {
+  items,
+  totalCount,
+  totalPrice,
+  decreaseItem,
+  increaseItem,
+  removeItem,
+  isLoading,
+  isAuthenticated,
+} = useCart()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
