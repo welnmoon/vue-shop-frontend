@@ -53,6 +53,7 @@ import type { ProductFromServerWithQuantity } from '../model/types.api'
 import ErrorBlock from '@/shared/ui/ErrorBlock/ErrorBlock.vue'
 import { useGetCart } from '@/entities/cart/api/useGetCart'
 import ProductCardActions from '@/features/UpdateCartItem/ui/ProductCardActions.vue'
+import { useCart } from '@/shared/composables/useCart'
 
 const route = useRoute()
 
@@ -76,12 +77,13 @@ const filters = computed(() => {
   }
 })
 const { data: productsFromServer, isLoading, isError, error, refetch } = useGetProducts(filters)
-const { data: cart } = useGetCart()
+// const { data: cart } = useGetCart()
+const { items: cartItems } = useCart()
 
 const cartQuantityMap = computed(() => {
   const map = new Map<string, number>()
 
-  for (const item of cart.value?.items ?? []) {
+  for (const item of cartItems.value ?? []) {
     map.set(item.productId, item.quantity)
   }
 

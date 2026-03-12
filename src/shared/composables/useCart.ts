@@ -15,15 +15,17 @@ import { computed, type ComputedRef } from 'vue'
 
 export const useCart = () => {
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetCurrentUser()
+  const isAuthenticated = computed(() => !!currentUser.value)
+
+  const { data: serverCart, isLoading: serverCartIsLoading } = useGetCart(isAuthenticated)
+
   const { mutate: addCartItem, isPending: addItemPending } = useAddCartItem()
   const { mutate: deleteCartItem, isPending: deleteItemPending } = useDeleteCartItem()
   const { mutate: updateCartItem, isPending: updateItemPending } = useUpdateCartItem()
-  const { data: serverCart, isLoading: serverCartIsLoading } = useGetCart()
 
   const cartStore = useCartStore()
   const { items: localCartItems } = storeToRefs(cartStore)
 
-  const isAuthenticated = computed(() => !!currentUser.value)
   const isLoading = computed(() => currentUserIsLoading.value && serverCartIsLoading.value)
 
   const items: ComputedRef<CartLine[]> = computed(() => {

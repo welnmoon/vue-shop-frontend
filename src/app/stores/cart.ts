@@ -3,7 +3,8 @@ import type { LocalCartItem } from './types'
 import type { Product } from '@/entities/product/model/types.api'
 
 export type CartState = LocalCartItem[]
-
+// Проблема, когда нет auth локальная корзина работает не верно
+// Также при добавлении карт item локально корзина продолжает зарпашивать данные с бэка
 function loadCart(): CartState {
   const raw = localStorage.getItem('cart')
 

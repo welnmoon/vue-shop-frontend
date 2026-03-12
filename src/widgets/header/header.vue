@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { useUIStore } from '@/app/stores/ui'
-import { useGetCart } from '@/entities/cart/api/useGetCart'
 import { useCart } from '@/shared/composables/useCart'
-import { getCartItemsQuantity } from '@/shared/helpers/getCartItemsQuantity'
 import CartDrawer from '@/shared/ui/CartDrawer/CartDrawer.vue'
-import { computed } from 'vue'
 
 const { totalCount, isLoading } = useCart()
 
