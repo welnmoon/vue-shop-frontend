@@ -44,7 +44,7 @@
                 <div class="text-h5 font-weight-bold mb-6">{{ product.price }} $</div>
 
                 <div class="flex flex-wrap gap-2">
-                  <v-btn color="primary" v-if="!isInCart" size="large" @click="addItem">
+                  <v-btn color="primary" v-if="!isInCart" size="large" @click="addItem(product)">
                     {{ addItemPending ? 'Добавление...' : 'Добавить в корзину' }}
                   </v-btn>
 

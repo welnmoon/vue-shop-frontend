@@ -26,7 +26,15 @@ export const useCart = () => {
   const cartStore = useCartStore()
   const { items: localCartItems } = storeToRefs(cartStore)
 
-  const isLoading = computed(() => currentUserIsLoading.value && serverCartIsLoading.value)
+  const isLoading = computed(() => {
+    if (currentUserIsLoading.value) return true
+
+    if (isAuthenticated.value) {
+      return serverCartIsLoading.value
+    }
+
+    return false
+  })
 
   const items: ComputedRef<CartLine[]> = computed(() => {
     if (isAuthenticated.value) {
