@@ -32,10 +32,10 @@
           <p class="text-sm text-gray-600 line-clamp-2">{{ p.description }}</p>
 
           <template #footer>
-            <div class="flex justify-between">
-              <div class="mt-2 font-semibold text-green-600">{{ p.price }} $</div>
+            <div class="mt-2 flex flex-col gap-3">
+              <div class="font-semibold text-green-600">{{ p.price }} $</div>
 
-              <ProductCardActions :productId="p.id" :quantity="p.quantity" />
+              <ProductCardActions :productId="p.id" :quantity="p.quantity" :product="p" />
             </div>
           </template>
         </BaseCard>
@@ -51,7 +51,6 @@ import { useGetProducts } from '../api/useGetProducts'
 import { computed } from 'vue'
 import type { ProductFromServerWithQuantity } from '../model/types.api'
 import ErrorBlock from '@/shared/ui/ErrorBlock/ErrorBlock.vue'
-import { useGetCart } from '@/entities/cart/api/useGetCart'
 import ProductCardActions from '@/features/UpdateCartItem/ui/ProductCardActions.vue'
 import { useCart } from '@/shared/composables/useCart'
 
@@ -77,7 +76,6 @@ const filters = computed(() => {
   }
 })
 const { data: productsFromServer, isLoading, isError, error, refetch } = useGetProducts(filters)
-// const { data: cart } = useGetCart()
 const { items: cartItems } = useCart()
 
 const cartQuantityMap = computed(() => {

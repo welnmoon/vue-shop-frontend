@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useUIStore } from '@/app/stores/ui'
 import { useCart } from '@/shared/composables/useCart'
-import CartDrawer from '@/shared/ui/CartDrawer/CartDrawer.vue'
+import CartDrawer from '../CartDrawer/CartDrawer.vue'
 
 const { totalCount, isLoading } = useCart()
 

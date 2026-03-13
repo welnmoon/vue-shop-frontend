@@ -14,7 +14,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div v-if="item?.productId && item.quantity" class="flex items-center justify-between">
+  <div v-if="item?.productId && item.quantity" class="flex items-center justify-between gap-6">
     <div class="flex gap-4">
       <button variant="flat" icon @click="emit('decrease', item)">
         <MinusSquare :size="20" />
