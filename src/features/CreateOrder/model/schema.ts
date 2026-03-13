@@ -1,3 +1,4 @@
+import { deliveryMethods, paymentMethods } from '@/entities/order/model/types.api'
 import * as z from 'zod'
 
 export const checkoutSchema = z.object({
@@ -11,4 +12,17 @@ export const checkoutSchema = z.object({
   agreeToTerms: z.boolean().refine((v) => v === true, {
     message: 'Нужно согласиться с условиями',
   }),
+  deliveryMethod: z.enum(deliveryMethods),
+  paymentMethod: z.enum(paymentMethods),
 })
+
+export const cartItemSchema = z.object({
+  productId: z.string(),
+  quantity: z.number().min(1, 'Минимум 1 товар'),
+})
+
+export const createOrderSchema = checkoutSchema.extend({
+  items: z.array(cartItemSchema).min(1, 'Добавьте хотя бы один товар'),
+})
+
+export type CreateOrder = z.infer<typeof createOrderSchema>

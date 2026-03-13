@@ -14,19 +14,21 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div v-if="item?.productId && item.quantity" class="flex items-center gap-2">
-    <v-btn variant="flat" icon @click="emit('decrease', item)">
-      <MinusSquare :size="20" />
-    </v-btn>
+  <div v-if="item?.productId && item.quantity" class="flex items-center justify-between">
+    <div class="flex gap-4">
+      <button variant="flat" icon @click="emit('decrease', item)">
+        <MinusSquare :size="20" />
+      </button>
 
-    <span>{{ item.quantity }}</span>
+      <span>{{ item.quantity }}</span>
 
-    <v-btn variant="flat" icon @click="emit('increase', item)">
-      <PlusSquare :size="20" />
-    </v-btn>
+      <button variant="flat" icon @click="emit('increase', item)">
+        <PlusSquare :size="20" />
+      </button>
+    </div>
 
-    <v-btn variant="flat" icon @click="emit('remove', item)">
+    <button class="" variant="flat" icon @click="emit('remove', item)">
       <Trash :size="20" color="red" />
-    </v-btn>
+    </button>
   </div>
 </template>

@@ -8,6 +8,7 @@ import type { CartLine } from '@/entities/cart/model/types'
 import type { Product } from '@/entities/product/model/types.api'
 import { useGetCurrentUser } from '@/entities/user/api/useGetCurrentUser'
 import { useAddCartItem } from '@/features/CreateCartItem/api/useAddCartItem'
+import { useDeleteCart } from '@/features/DeleteCart/api/useDeleteCart'
 import { useDeleteCartItem } from '@/features/DeleteCartItem/api/useDeleteCartItem'
 import { useUpdateCartItem } from '@/features/UpdateCartItem/api/useUpdateCartItem'
 import { storeToRefs } from 'pinia'
@@ -21,6 +22,7 @@ export const useCart = () => {
 
   const { mutate: addCartItem, isPending: addItemPending } = useAddCartItem()
   const { mutate: deleteCartItem, isPending: deleteItemPending } = useDeleteCartItem()
+  const { mutate: deleteCart } = useDeleteCart()
   const { mutate: updateCartItem, isPending: updateItemPending } = useUpdateCartItem()
 
   const cartStore = useCartStore()
@@ -99,6 +101,14 @@ export const useCart = () => {
     }
   }
 
+  const clearCart = () => {
+    if (isAuthenticated.value) {
+      deleteCart()
+    } else {
+      cartStore.clearCart()
+    }
+  }
+
   return {
     items,
     totalCount,
@@ -113,5 +123,6 @@ export const useCart = () => {
     updateItemPending,
     getItem,
     isAuthenticated,
+    clearCart,
   }
 }

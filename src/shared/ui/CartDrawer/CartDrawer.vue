@@ -32,6 +32,7 @@
           </div>
         </div>
         <InfoBlock
+          :can-dismiss="true"
           v-else-if="!isAuthenticated"
           text="Войдите в аккаунт чтобы сохранить свою корзину"
           action-text="Перейти к логину"

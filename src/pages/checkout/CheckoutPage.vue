@@ -1,78 +1,44 @@
 <template>
-  <section>
+  <section v-if="showForm" class="flex flex-col">
     <BaseText level="h2" text="Checkout" />
-    <div v-for="item in items" :key="item.productId">
-      <BaseCard>
-        <template #header
-          ><div>{{ item.title }}</div></template
-        >
+    <section class="flex flex-col gap-4 md:flex-row md:items-start">
+      <div class="flex-1">
+        <div class="flex flex-col gap-4">
+          <div class="" v-for="item in items" :key="item.productId">
+            <CartItem
+              @remove="removeItem"
+              @decrease="decreaseItem"
+              @increase="increaseItem"
+              variant="elevated"
+              :cart-item="item"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="md:w-[420px] md:sticky md:top-6">
+        <CheckoutForm :items="items" />
+      </div>
+    </section>
+  </section>
 
-        <div>{{ item.price }}</div>
-
-        <template #footer>
-          <div id="footer">{{ item.quantity }}</div></template
-        >
-      </BaseCard>
-    </div>
-    <CheckoutForm />
+  <section v-else>
+    <InfoBlock
+      action-to="/"
+      action-text="На Главную"
+      title="Корзина пуста"
+      text="Добавьте товары в корзину"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
-import CheckoutForm from '@/features/Checkout/ui/CheckoutForm.vue'
+import CheckoutForm from '@/features/CreateOrder/ui/CheckoutForm.vue'
 import { useCart } from '@/shared/composables/useCart'
-import BaseCard from '@/shared/ui/BaseCard/BaseCard.vue'
 import BaseText from '@/shared/ui/BaseHeading/BaseText.vue'
+import CartItem from '@/shared/ui/CartItem/CartItem.vue'
+import InfoBlock from '@/shared/ui/InfoBlock/InfoBlock.vue'
+import { computed } from 'vue'
 
-const { items } = useCart()
+const { items, decreaseItem, increaseItem, removeItem } = useCart()
+const showForm = computed(() => items.value.length > 0)
 </script>
-
-<!-- Обязательно
-
-контактная форма
-
-адрес
-
-доставка
-
-оплата (выбор метода)
-
-summary
-
-submit
-
-клиентская валидация
-
-серверные ошибки
-
-loading state
-
-disabled state
-
-success/error feedback
-
-Хорошо добавить
-
-промокод
-
-“billing same as shipping”
-
-автозаполнение из профиля
-
-сохранение черновика в store/localStorage
-
-шаги checkout
-
-обработка ошибок по полям от сервера
-
-Уже очень хорошо
-
-schema-driven validation
-
-типизация API-ответов
-
-разделение UI/business logic
-
-unit tests хотя бы на composables/validation
-
-e2e сценарий “успешный заказ / ошибка / невалидные поля” -->

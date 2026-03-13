@@ -2,6 +2,9 @@ export const cartApi = {
   getCart: {
     url: () => 'cart',
   },
+  deleteCart: {
+    url: () => 'cart',
+  },
   addCartItem: {
     url: () => 'cart/items',
   },

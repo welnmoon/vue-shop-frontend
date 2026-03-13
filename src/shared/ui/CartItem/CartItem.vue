@@ -1,14 +1,18 @@
 <template>
-  <v-card :color="color" :variant="variant" class="mx-auto">
-    <v-card-item>
+  <v-card :color="color" :variant="variant" class="mx-auto py-4 px-4">
+    <div class="flex gap-4">
+      <v-img
+        :src="cartItem.image"
+        :alt="cartItem.title"
+        max-width="100"
+        min-width="100"
+        class="rounded-md mb-4"
+      ></v-img>
       <div>
-        <div class="text-label-medium text-uppercase mt-2 mb-3">
-          {{ variant }}
-        </div>
         <div class="text-title-large mb-1">{{ cartItem.title }}</div>
         <div class="text-body-small">{{ cartItem.description }}</div>
       </div>
-    </v-card-item>
+    </div>
 
     <CartItemActions
       @increase="emit('increase', cartItem)"

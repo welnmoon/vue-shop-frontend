@@ -4,6 +4,7 @@
     class="relative w-full flex flex-col items-center justify-center text-center border border-blue-200 bg-blue-50 rounded-lg p-8 gap-4"
   >
     <X
+      v-if="canDismiss"
       @click="dismissBlock('cart-auth-info')"
       class="absolute top-2 right-2 cursor-pointer text-gray-400"
       title="Закрыть инфоблок"
@@ -52,6 +53,7 @@ withDefaults(
     text: string
     actionText?: string
     actionTo?: string
+    canDismiss?: boolean
   }>(),
   {
     title: 'Информация',
