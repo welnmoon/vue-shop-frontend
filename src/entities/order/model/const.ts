@@ -1,4 +1,4 @@
-import type { DeliveryMethods, PaymentMethods } from './types.api'
+import type { DeliveryMethods, PaymentMethods } from './types/order-user'
 
 export const deliveryMethods: Record<DeliveryMethods, string> = {
   delivery: 'Доставка',

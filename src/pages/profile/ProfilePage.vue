@@ -19,7 +19,12 @@
 
     <div v-if="ordersIsLoading" class="text-zinc-500">Загрузка заказов...</div>
 
-    <ErrorBlock v-else-if="ordersIsError" :error="ordersError" :showRetry="true" @retry="refetchOrders" />
+    <ErrorBlock
+      v-else-if="ordersIsError"
+      :error="ordersError"
+      :showRetry="true"
+      @retry="refetchOrders"
+    />
 
     <div v-else-if="!orders?.length" class="text-zinc-500">У вас пока нет заказов</div>
 
@@ -65,7 +70,7 @@
 
 <script lang="ts" setup>
 import { deliveryMethods, paymentMethods } from '@/entities/order/model/const'
-import type { OrderWithItems } from '@/entities/order/model/types.api'
+import type { OrderWithItems } from '@/entities/order/model/types/order-user'
 import { useGetOrders } from '@/entities/order/api/useGetOrders'
 import { useGetCurrentUser } from '@/entities/user/api/useGetCurrentUser'
 import { useLogout } from '@/entities/user/api/useLogout'

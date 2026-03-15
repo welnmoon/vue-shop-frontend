@@ -13,7 +13,7 @@ import { useCart } from '@/shared/composables/useCart'
 import { computed, type ComputedRef } from 'vue'
 import BaseRadioGroup from '@/shared/ui/BaseRadioGroup/BaseRadioGroup.vue'
 import { deliveryMethods, paymentMethods } from '@/entities/order/model/const'
-import type { DeliveryMethods, PaymentMethods } from '@/entities/order/model/types.api'
+import type { DeliveryMethods, PaymentMethods } from '@/entities/order/model/types/order-user'
 import type { CartLine } from '@/entities/cart/model/types'
 
 const { mutate: createOrder, isPending: orderIsCreating } = useCreateOrder()

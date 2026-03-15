@@ -1,4 +1,4 @@
-import { deliveryMethods, paymentMethods } from '@/entities/order/model/types.api'
+import { deliveryMethods, paymentMethods } from '@/entities/order/model/types/order-user'
 import * as z from 'zod'
 
 export const checkoutSchema = z.object({

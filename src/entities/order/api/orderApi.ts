@@ -5,4 +5,10 @@ export const orderApi = {
   getMyOrders: {
     url: () => 'orders/my',
   },
+  getGuestOrderById: {
+    url: (orderId: string) => `orders/guest/${orderId}`,
+  },
+  getMyOrderById: {
+    url: (orderId: string) => `orders/my/${orderId}`,
+  },
 }

@@ -1,30 +1,58 @@
-import { getCurrentUser, useGetCurrentUser } from '@/entities/user/api/useGetCurrentUser'
-import AboutPage from '@/pages/about/AboutPage.vue'
-import LoginPage from '@/pages/login/LoginPage.vue'
-import MainPage from '@/pages/main/MainPage.vue'
-import ProfilePage from '@/pages/profile/ProfilePage.vue'
-import ProductPage from '@/pages/product/ProductPage.vue'
-import RegisterPage from '@/pages/register/RegisterPage.vue'
+import { getCurrentUser } from '@/entities/user/api/useGetCurrentUser'
+
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { queryClient } from '@/shared/api/queryClient'
-import CheckoutPage from '@/pages/checkout/CheckoutPage.vue'
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', name: 'home', component: MainPage },
-  { path: '/about', name: 'about', component: AboutPage },
-  { path: '/product/:id', name: 'product', component: ProductPage, props: true },
-  { path: '/login', name: 'login', component: LoginPage, meta: { guestOnly: true } },
-  { path: '/register', name: 'register', component: RegisterPage, meta: { guestOnly: true } },
+  { path: '/', name: 'home', component: () => import('@/pages/main/MainPage.vue') },
+  { path: '/about', name: 'about', component: () => import('@/pages/about/AboutPage.vue') },
+  {
+    path: '/product/:id',
+    name: 'product',
+    component: () => import('@/pages/product/ProductPage.vue'),
+    props: true,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/pages/login/LoginPage.vue'),
+    meta: { guestOnly: true },
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/pages/register/RegisterPage.vue'),
+    meta: { guestOnly: true },
+  },
   {
     path: '/profile',
     name: 'profile',
-    component: ProfilePage,
+    component: () => import('@/pages/profile/ProfilePage.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/checkout',
     name: 'checkout',
-    component: CheckoutPage,
+    component: () => import('@/pages/checkout/CheckoutPage.vue'),
+  },
+  {
+    path: '/orders/guest/:orderId',
+    name: 'guest-order',
+    component: () => import('@/pages/guest-order/GuestOrderPage.vue'),
+    meta: { guestOnly: true },
+    props: true,
+  },
+  {
+    path: '/orders/:orderId',
+    name: 'order-details',
+    component: () => import('@/pages/order-details/OrderDetailsPage.vue'),
+    meta: { requiresAuth: true },
+    props: true,
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('@/pages/not-found/NotFoundPage.vue'),
   },
 ]
 
@@ -52,6 +80,14 @@ router.beforeEach(async (to) => {
 
   if (to.meta.guestOnly && user) {
     return { name: 'profile' }
+  }
+
+  if (to.name === 'guest-order' && user) {
+    return { name: 'profile' }
+  }
+
+  if (to.name === 'order-details' && !user) {
+    return { name: 'login' }
   }
 })
 
