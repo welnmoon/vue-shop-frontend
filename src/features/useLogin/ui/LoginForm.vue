@@ -1,5 +1,5 @@
 <template>
-  <v-form @submit.prevent="submit">
+  <q-form @submit.prevent="submit">
     <div class="mb-3">
       <BaseInput
         v-model="values.email"
@@ -31,7 +31,7 @@
     </p>
 
     <ErrorText v-if="error">{{ error.message }}</ErrorText>
-  </v-form>
+  </q-form>
 </template>
 
 <script lang="ts" setup>

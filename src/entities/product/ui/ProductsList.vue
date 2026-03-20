@@ -1,20 +1,20 @@
 <template>
-  <div class="w-full">
+  <div class="flex-1">
     <div
       v-if="isLoading"
       class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4"
     >
       <div v-for="i in 8" :key="i" class="w-full h-full rounded-lg border p-4 shadow-sm">
-        <v-skeleton-loader type="image" height="160" class="w-full rounded" />
+        <q-skeleton type="rect" height="160px" class="w-full rounded" />
 
-        <v-skeleton-loader type="heading" class="w-full" />
+        <q-skeleton type="text" class="w-full" />
 
-        <v-skeleton-loader type="text" class="w-full" />
-        <v-skeleton-loader type="text" class="w-3/4" />
+        <q-skeleton type="text" class="w-full" />
+        <q-skeleton type="text" class="w-3/4" />
 
         <div class="flex items-center justify-between gap-3">
-          <v-skeleton-loader type="text" width="100" />
-          <v-skeleton-loader type="button" width="100" />
+          <q-skeleton type="text" width="100px" />
+          <q-skeleton type="rect" width="100px" height="36px" />
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
             <img :src="p.image" :alt="p.title" class="w-full h-40 object-contain rounded" />
           </template>
 
-          <h3 class="mt-2 font-semibold line-clamp-2">{{ p.title }}</h3>
+          <BaseText :text="p.title" level="base" class="mt-2 font-semibold line-clamp-2" />
           <p class="text-sm text-gray-600 line-clamp-2">{{ p.description }}</p>
 
           <template #footer>
@@ -53,6 +53,7 @@ import type { ProductFromServerWithQuantity } from '../model/types.api'
 import ErrorBlock from '@/shared/ui/ErrorBlock/ErrorBlock.vue'
 import ProductCardActions from '@/features/UpdateCartItem/ui/ProductCardActions.vue'
 import { useCart } from '@/shared/composables/useCart'
+import BaseText from '@/shared/ui/BaseHeading/BaseText.vue'
 
 const route = useRoute()
 
@@ -82,7 +83,7 @@ const cartQuantityMap = computed(() => {
   const map = new Map<string, number>()
 
   for (const item of cartItems.value ?? []) {
-    map.set(item.productId, item.quantity)
+    map.set(String(item.productId), item.quantity)
   }
 
   return map
@@ -91,7 +92,7 @@ const cartQuantityMap = computed(() => {
 const products = computed<ProductFromServerWithQuantity[]>(() =>
   (productsFromServer.value ?? []).map((p) => ({
     ...p,
-    quantity: cartQuantityMap.value.get(p.id) ?? 0,
+    quantity: cartQuantityMap.value.get(String(p.id)) ?? 0,
   })),
 )
 </script>

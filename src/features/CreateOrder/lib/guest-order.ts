@@ -3,12 +3,13 @@ const GUEST_ORDER_STORAGE_KEY = 'guest_orders'
 export type GuestOrderAccess = {
   orderId: string
   token: string
-  createdAt: string
 }
 
-export const saveGuestOrderAccess = (order: GuestOrderAccess) => {
+type GuestOrderAccessWithData = GuestOrderAccess & { createdAt: string }
+
+export const saveGuestOrderAccess = (order: GuestOrderAccessWithData) => {
   const raw = localStorage.getItem(GUEST_ORDER_STORAGE_KEY)
-  const current: GuestOrderAccess[] = raw ? JSON.parse(raw) : []
+  const current: GuestOrderAccessWithData[] = raw ? JSON.parse(raw) : []
 
   const next = current.filter((x) => x.orderId !== order.orderId)
 

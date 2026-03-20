@@ -56,7 +56,7 @@ export const useCart = () => {
 
   const getItem = (item?: Product) => {
     if (!item) return undefined
-    return items.value.find((i) => i.productId === item.id)
+    return items.value.find((i) => String(i.productId) === String(item.id))
   }
 
   const addItem = (product: Product) => {
@@ -76,7 +76,7 @@ export const useCart = () => {
   }
 
   const increaseItem = (item: CartLine) => {
-    const quantity = items.value?.find((i) => i.productId === item.productId)?.quantity
+    const quantity = items.value?.find((i) => String(i.productId) === String(item.productId))?.quantity
     const nextQuantity = quantity ? quantity + 1 : 1
     if (isAuthenticated.value) {
       if (!item.itemId) return
@@ -87,7 +87,7 @@ export const useCart = () => {
   }
 
   const decreaseItem = (item: CartLine) => {
-    const quantity = items.value?.find((i) => i.productId === item.productId)?.quantity
+    const quantity = items.value?.find((i) => String(i.productId) === String(item.productId))?.quantity
     const nextQuantity = quantity ? quantity - 1 : 1
     if (isAuthenticated.value) {
       if (!item.itemId) return

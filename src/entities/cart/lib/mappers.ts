@@ -1,6 +1,6 @@
 import type { LocalCartItem } from '@/app/stores/types'
 import type { CartLine } from '../model/types'
-import type { CartItem } from '../model/types.api'
+import type { CartItem, MergeCartDto, MergeCartItemDto } from '../model/types.api'
 
 export const mapServerCartItemToCartLine = (item: CartItem): CartLine => {
   return {
@@ -33,4 +33,17 @@ export const mapLocalCartItemToCartLine = (item: LocalCartItem): CartLine => {
 
 export const mapLocalCartItemsToCartLines = (items: LocalCartItem[]): CartLine[] => {
   return items.map(mapLocalCartItemToCartLine)
+}
+
+export const mapCartLineToMergedCartItem = (item: CartLine): MergeCartItemDto => {
+  return {
+    productId: item.productId,
+    quantity: item.quantity,
+  }
+}
+
+export const mapCartLinesToMergeCartDto = (items: CartLine[]): MergeCartDto => {
+  return {
+    items: items.map(mapCartLineToMergedCartItem),
+  }
 }

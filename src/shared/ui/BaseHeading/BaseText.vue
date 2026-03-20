@@ -7,16 +7,16 @@
 <script lang="ts" setup>
 const headings = {
   h1: {
-    style: 'text-4xl font-bold text-zinc-800',
-    tag: 'h1',
+    style: 'text-2xl font-bold text-zinc-800',
+    tag: 'h3',
   },
   h2: {
-    style: 'text-2xl font-bold text-zinc-800',
-    tag: 'h2',
+    style: 'text-lg font-bold text-zinc-800',
+    tag: 'h4',
   },
   h3: {
-    style: 'text-lg font-bold text-zinc-800',
-    tag: 'h3',
+    style: 'text-md font-bold text-zinc-800',
+    tag: 'h5',
   },
   base: {
     style: 'text-base font-medium text-zinc-800',

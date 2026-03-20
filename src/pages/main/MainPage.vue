@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-4 items-start">
+  <div class="flex flex-col md:flex-row gap-4 items-start">
     <FilterSidebar />
     <ProductsList />
   </div>
@@ -8,7 +8,6 @@
 <script lang="ts" setup>
 import ProductsList from '@/entities/product/ui/ProductsList.vue'
 import FilterSidebar from '@/widgets/filter-sidebar/FilterSidebar.vue'
-import { ref } from 'vue'
 </script>
 
 <style scoped></style>

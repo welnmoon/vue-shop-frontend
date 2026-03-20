@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
 
 type DismissedMap = Record<string, boolean>
 const dismissedBlockKey = 'dismissed-ui-blocks'
@@ -67,8 +66,8 @@ const setOverflow = (value: string) => {
   document.body.style.overflow = value
 
   document.querySelector('#app')?.setAttribute('style', `overflow:${value}`)
-  document.querySelector('.v-main')?.setAttribute('style', `overflow:${value}`)
-  document.querySelector('.v-application__wrap')?.setAttribute('style', `overflow:${value}`)
+  document.querySelector('.q-layout')?.setAttribute('style', `overflow:${value}`)
+  document.querySelector('.q-page-container')?.setAttribute('style', `overflow:${value}`)
 }
 export const lockScroll = () => setOverflow('hidden')
 export const unlockScroll = () => setOverflow('')

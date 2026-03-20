@@ -74,9 +74,9 @@ router.beforeEach(async (to) => {
     staleTime: 5 * 60 * 1000,
   })
 
-  if (to.meta.requiresAuth && !user) {
-    return { name: 'login' }
-  }
+  // if (to.meta.requiresAuth && !user) {
+  //   return { name: 'login' }
+  // }
 
   if (to.meta.guestOnly && user) {
     return { name: 'profile' }

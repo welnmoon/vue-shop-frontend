@@ -1,25 +1,21 @@
 <template>
-  <v-container class="fill-height auth-page" fluid>
-    <v-row align="center" justify="center" class="fill-height">
-      <v-col cols="12" sm="8" md="6" lg="4">
-        <v-card class="pa-2" rounded="xl" elevation="10">
-          <v-card-item class="pb-2">
-            <v-card-title>
-              <BaseText :text="title" level="h2" />
-            </v-card-title>
+  <section class="auth-page flex items-center justify-center px-4">
+    <div class="w-full max-w-md">
+      <q-card class="p-2 rounded-xl shadow-md" flat bordered>
+        <q-card-section class="pb-2">
+          <BaseText :text="title" level="h2" />
 
-            <v-card-subtitle v-if="subtitle" class="pt-1">
-              {{ subtitle }}
-            </v-card-subtitle>
-          </v-card-item>
+          <div v-if="subtitle" class="pt-1 text-sm text-zinc-500">
+            {{ subtitle }}
+          </div>
+        </q-card-section>
 
-          <v-card-text>
-            <slot />
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+        <q-card-section>
+          <slot />
+        </q-card-section>
+      </q-card>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">

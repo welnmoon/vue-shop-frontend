@@ -20,3 +20,12 @@ export type CartItem = {
   quantity: number
   product: Product
 }
+
+export type MergeCartItemDto = {
+  productId: string
+  quantity: number
+}
+
+export type MergeCartDto = {
+  items: MergeCartItemDto[]
+}

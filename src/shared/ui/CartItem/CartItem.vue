@@ -1,16 +1,16 @@
 <template>
-  <v-card :color="color" :variant="variant" class="mx-auto py-4 px-4">
+  <q-card flat bordered class="mx-auto py-4 px-4" :class="cardClass">
     <div class="flex gap-4">
-      <v-img
+      <q-img
         :src="cartItem.image"
         :alt="cartItem.title"
-        max-width="100"
-        min-width="100"
+        style="width: 100px; min-width: 100px; height: 100px"
+        fit="contain"
         class="rounded-md mb-4"
-      ></v-img>
+      />
       <div>
-        <div class="text-title-large mb-1">{{ cartItem.title }}</div>
-        <div class="text-body-small">{{ cartItem.description }}</div>
+        <div class="text-lg font-semibold mb-1">{{ cartItem.title }}</div>
+        <div class="text-sm text-zinc-600">{{ cartItem.description }}</div>
       </div>
     </div>
 
@@ -20,21 +20,26 @@
       @remove="emit('remove', cartItem)"
       :item="cartItem"
     />
-  </v-card>
+  </q-card>
 </template>
 <script lang="ts" setup>
 import type { CartLine } from '@/entities/cart/model/types'
 import CartItemActions from '@/features/UpdateCartItem/ui/CartItemActions.vue'
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 const variants = ['elevated', 'flat', 'tonal', 'outlined', 'text', 'plain'] as const
 type Variant = (typeof variants)[number]
-const color = ref('tonal')
 
 const props = defineProps<{
   cartItem: CartLine
   variant?: Variant
 }>()
+
+const cardClass = computed(() => {
+  if (props.variant === 'elevated') return 'shadow-sm'
+  if (props.variant === 'outlined') return 'border'
+  return ''
+})
 
 const emit = defineEmits<{
   (e: 'increase', item: CartLine): void

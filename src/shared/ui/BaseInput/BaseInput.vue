@@ -1,17 +1,17 @@
 <template>
   <div class="mb-3">
-    <v-text-field
+    <q-input
       :model-value="modelValue"
       @update:model-value="onUpdate"
       :label="label"
       :type="type"
-      variant="outlined"
-      hide-details
+      outlined
+      dense
+      hide-bottom-space
       :min="min"
       :max="max"
       :id="id"
       :placeholder="placeholder"
-      density="compact"
       v-bind="$attrs"
     />
     <ErrorText v-if="validationError">{{ validationError }}</ErrorText>
@@ -22,22 +22,36 @@
 import ErrorText from '../ErrorText/ErrorText.vue'
 defineOptions({ inheritAttrs: false })
 
+type InputType =
+  | 'text'
+  | 'password'
+  | 'email'
+  | 'number'
+  | 'search'
+  | 'textarea'
+  | 'time'
+  | 'date'
+  | 'tel'
+  | 'url'
+  | 'datetime-local'
+  | 'file'
+
 const props = defineProps<{
-  modelValue?: string
+  modelValue?: string | number | null
   label?: string
   validationError?: string
-  type?: string
+  type?: InputType
   id?: string
   placeholder?: string
-  max?: string
-  min?: string
+  max?: string | number
+  min?: string | number
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: string | number | null): void
 }>()
 
-const onUpdate = (value: string) => {
+const onUpdate = (value: string | number | null) => {
   emit('update:modelValue', value)
 }
 </script>

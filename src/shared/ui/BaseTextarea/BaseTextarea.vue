@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 defineOptions({ inheritAttrs: false })
-defineProps<{
+const props = defineProps<{
   label?: string
-  modelValue?: string
+  modelValue?: string | null
   validationError?: string
   id?: string
   placeholder?: string
@@ -10,21 +12,29 @@ defineProps<{
 }>()
 
 const emits = defineEmits<{
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: string | null): void
 }>()
+
+const inputStyle = computed(() =>
+  props.maxRows ? { maxHeight: `${props.maxRows * 24}px`, overflowY: 'auto' } : undefined,
+)
 </script>
 
 <template>
-  <v-textarea
+  <q-input
+    type="textarea"
     :label="label"
     :model-value="modelValue"
-    @update:model-value="emits('update:modelValue', $event)"
-    :error-messages="validationError"
+    @update:model-value="emits('update:modelValue', ($event as string | null) ?? '')"
+    :error="!!validationError"
+    :error-message="validationError"
     :id="id"
     :placeholder="placeholder"
-    density="compact"
+    :input-style="inputStyle"
+    outlined
+    dense
+    autogrow
+    hide-bottom-space
     v-bind="$attrs"
-    :max-rows="maxRows"
-  >
-  </v-textarea>
+  />
 </template>

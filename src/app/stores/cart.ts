@@ -15,8 +15,8 @@ function loadCart(): CartState {
   }
 }
 
-function findCartItem(items: CartState, id: string) {
-  return items.find((item) => item.productId === id)
+function findCartItem(items: CartState, id: string | number) {
+  return items.find((item) => String(item.productId) === String(id))
 }
 
 export const useCartStore = defineStore('cart', {
@@ -31,9 +31,9 @@ export const useCartStore = defineStore('cart', {
 
     getItems: (state) => state.items,
 
-    getItemById: (state) => (id: string) => findCartItem(state.items, id),
+    getItemById: (state) => (id: string | number) => findCartItem(state.items, id),
 
-    getItemQuantity: (state) => (id: string) => findCartItem(state.items, id)?.quantity,
+    getItemQuantity: (state) => (id: string | number) => findCartItem(state.items, id)?.quantity,
 
     getCartPrice: (state) => state.items.reduce((acc, i) => acc + i.price * i.quantity, 0),
   },
@@ -53,13 +53,13 @@ export const useCartStore = defineStore('cart', {
       }
     },
 
-    removeItem(id: string) {
-      this.items = this.items.filter((item) => item.productId !== id)
+    removeItem(id: string | number) {
+      this.items = this.items.filter((item) => String(item.productId) !== String(id))
 
       this.saveCart()
     },
 
-    decreaseItem(id: string) {
+    decreaseItem(id: string | number) {
       const existing = findCartItem(this.items, id)
 
       if (existing && existing.quantity > 1) {
@@ -71,7 +71,7 @@ export const useCartStore = defineStore('cart', {
       this.saveCart()
     },
 
-    increaseItem(id: string) {
+    increaseItem(id: string | number) {
       const existing = findCartItem(this.items, id)
 
       if (existing) {

@@ -26,9 +26,9 @@
       позже.
     </p>
 
-    <v-btn v-if="showRetry" color="red" variant="outlined" @click="$emit('retry')">
+    <q-btn v-if="showRetry" color="negative" outline no-caps @click="$emit('retry')">
       Попробовать снова
-    </v-btn>
+    </q-btn>
 
     <div v-if="error" class="text-xs text-red-500 mt-2">
       {{ error }}

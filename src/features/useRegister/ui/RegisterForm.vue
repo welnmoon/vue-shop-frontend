@@ -1,25 +1,23 @@
 <template>
-  <v-form @submit.prevent="submit">
+  <q-form @submit.prevent="submit">
     <div class="mb-3">
-      <v-text-field
+      <BaseInput
         v-model="values.email"
         label="Email"
         type="email"
-        variant="outlined"
-        hide-details
+        placeholder="Email"
+        :validation-error="validationErrors.email"
       />
-      <ErrorText v-if="validationErrors.email">{{ validationErrors.email }}</ErrorText>
     </div>
 
     <div class="mb-3">
-      <v-text-field
+      <BaseInput
         label="Пароль"
         v-model="values.password"
         type="password"
-        variant="outlined"
-        hide-details
+        placeholder="Пароль"
+        :validation-error="validationErrors.password"
       />
-      <ErrorText v-if="validationErrors.password">{{ validationErrors.password }}</ErrorText>
     </div>
 
     <Button variant="outline" :disabled="isPending" type="submit">
@@ -32,12 +30,13 @@
     </p>
 
     <ErrorText v-if="error">{{ error.message }}</ErrorText>
-  </v-form>
+  </q-form>
 </template>
 
 <script lang="ts" setup>
 import Button from '@/shared/ui/Button/Button.vue'
 import ErrorText from '@/shared/ui/ErrorText/ErrorText.vue'
+import BaseInput from '@/shared/ui/BaseInput/BaseInput.vue'
 import { useRegisterForm } from '../api/useRegisterForm'
 
 const { values, validationErrors, error, isPending, submit } = useRegisterForm()

@@ -1,7 +1,14 @@
 <template>
-  <v-btn :type="type" :disabled="disabled" :class="buttonClass">
+  <q-btn
+    :type="props.type"
+    :disable="props.disabled"
+    :class="buttonClass"
+    :unelevated="props.variant !== 'outline'"
+    :outline="props.variant === 'outline'"
+    no-caps
+  >
     <slot />
-  </v-btn>
+  </q-btn>
 </template>
 
 <script setup lang="ts">

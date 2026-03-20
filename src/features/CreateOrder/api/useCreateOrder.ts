@@ -22,7 +22,6 @@ export const useCreateOrder = () => {
       }),
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ['order'] })
-      router.push({ name: 'profile' })
 
       if (data.guestAccessToken) {
         saveGuestOrderAccess({

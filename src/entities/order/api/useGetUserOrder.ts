@@ -1,6 +1,7 @@
 import { httpClient } from '@/shared/api/httpClient'
 import { useQuery } from '@tanstack/vue-query'
 import { orderApi } from './orderApi'
+import type { OrderWithItems } from '../model/types/order-user'
 
 export const useGetUserOrder = (orderId?: string) => {
   return useQuery({
@@ -11,7 +12,7 @@ export const useGetUserOrder = (orderId?: string) => {
         throw new Error('orderId is required')
       }
 
-      return httpClient<any>(orderApi.getMyOrderById.url(orderId), {
+      return httpClient<OrderWithItems>(orderApi.getMyOrderById.url(orderId), {
         method: 'GET',
         credentials: 'include',
       })

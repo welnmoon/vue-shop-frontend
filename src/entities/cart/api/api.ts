@@ -14,4 +14,7 @@ export const cartApi = {
   updateCartItem: {
     url: (itemId: string) => `cart/items/${itemId}`,
   },
+  mergeCart: {
+    url: () => 'cart/merge',
+  },
 }

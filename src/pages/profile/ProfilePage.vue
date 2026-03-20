@@ -3,12 +3,19 @@
     <div class="flex items-center justify-between gap-3">
       <BaseText text="Профиль" level="h1" />
       <button
+        v-if="isAuthenticated"
         @click="handleLogout"
         :disabled="logoutIsPending"
         class="rounded-md border border-zinc-300 px-4 py-2 hover:bg-neutral-100 disabled:pointer-events-none disabled:opacity-50"
       >
         {{ logoutIsPending ? 'Выходим...' : 'Выйти' }}
       </button>
+      <div v-if="!isAuthenticated">
+        <div class="text-zinc-500">Вы не авторизованы</div>
+        <RouterLink to="/login" class="text-blue-600 hover:underline"
+          ><q-btn to="/login" color="purple-12" label="Войти" unelevated
+        /></RouterLink>
+      </div>
     </div>
 
     <div v-if="currentUser?.email" class="text-sm text-zinc-500">{{ currentUser.email }}</div>
@@ -17,16 +24,11 @@
 
     <BaseText text="Заказы" level="h2" />
 
-    <div v-if="ordersIsLoading" class="text-zinc-500">Загрузка заказов...</div>
+    <div v-if="isLoading" class="text-zinc-500">Загрузка заказов...</div>
 
-    <ErrorBlock
-      v-else-if="ordersIsError"
-      :error="ordersError"
-      :showRetry="true"
-      @retry="refetchOrders"
-    />
+    <ErrorBlock v-else-if="isError" :error="error" :showRetry="true" @retry="refetch" />
 
-    <div v-else-if="!orders?.length" class="text-zinc-500">У вас пока нет заказов</div>
+    <div v-else-if="!orders.length" class="text-zinc-500">У вас пока нет заказов</div>
 
     <div v-else class="grid gap-4">
       <BaseCard v-for="order in orders" :key="order.id">
@@ -68,46 +70,77 @@
   </section>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
 import { deliveryMethods, paymentMethods } from '@/entities/order/model/const'
 import type { OrderWithItems } from '@/entities/order/model/types/order-user'
-import { useGetOrders } from '@/entities/order/api/useGetOrders'
 import { useGetCurrentUser } from '@/entities/user/api/useGetCurrentUser'
 import { useLogout } from '@/entities/user/api/useLogout'
 import BaseCard from '@/shared/ui/BaseCard/BaseCard.vue'
 import BaseText from '@/shared/ui/BaseHeading/BaseText.vue'
 import ErrorBlock from '@/shared/ui/ErrorBlock/ErrorBlock.vue'
+import { useOrders } from '@/shared/composables/useOrders'
+import { formatDate } from '@/shared/helpers/formatDate'
+import { defineComponent } from 'vue'
+import { useCart } from '@/shared/composables/useCart'
+import { RouterLink } from 'vue-router'
 
-const { data: currentUser } = useGetCurrentUser()
-const {
-  mutate: submitLogout,
-  isPending: logoutIsPending,
-  isError: logoutIsError,
-  error: logoutError,
-} = useLogout()
-const {
-  data: orders,
-  isLoading: ordersIsLoading,
-  isError: ordersIsError,
-  error: ordersError,
-  refetch: refetchOrders,
-} = useGetOrders()
+export default defineComponent({
+  name: 'ProfilePage',
 
-const handleLogout = () => {
-  submitLogout()
-}
+  components: {
+    BaseCard,
+    BaseText,
+    ErrorBlock,
+  },
 
-const formatDate = (value: string) => {
-  const date = new Date(value)
+  setup() {
+    const { items: cartItems } = useCart()
+    const { data: currentUser } = useGetCurrentUser()
 
-  if (Number.isNaN(date.getTime())) {
-    return value
-  }
+    const {
+      mutate: submitLogout,
+      isPending: logoutIsPending,
+      isError: logoutIsError,
+      error: logoutError,
+    } = useLogout()
 
-  return date.toLocaleString('ru-RU')
-}
+    const { orders, isLoading, isError, error, refetch, isAuthenticated } = useOrders()
 
-const getOrderTotal = (order: OrderWithItems) => {
-  return order.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-}
+    return {
+      currentUser,
+      submitLogout,
+      logoutIsPending,
+      logoutIsError,
+      logoutError,
+      orders,
+      isLoading,
+      isError,
+      error,
+      refetch,
+      deliveryMethods,
+      paymentMethods,
+      isAuthenticated,
+    }
+  },
+
+  methods: {
+    handleLogout() {
+      this.submitLogout()
+    },
+
+    formatDate(value: string) {
+      const date = new Date(value)
+
+      if (Number.isNaN(date.getTime())) {
+        return value
+      }
+
+      return date.toLocaleString('ru-RU')
+    },
+
+    getOrderTotal(order: OrderWithItems) {
+      return order.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    },
+  },
+})
 </script>

@@ -1,115 +1,141 @@
 <template>
-  <v-navigation-drawer
-    width="400"
-    :model-value="props.modelValue"
-    temporary
-    location="right"
-    @update:model-value="emit('update:modelValue', $event)"
+  <q-dialog
+    :model-value="modelValue"
+    position="right"
+    @update:model-value="$emit('update:modelValue', $event)"
   >
-    <div class="flex flex-col h-full">
+    <q-card class="column no-wrap full-height cart-drawer">
       <div class="p-4 flex items-center justify-between">
         <h2 class="text-lg font-semibold">Корзина</h2>
-        <v-btn variant="text" @click="closeDrawer"><X /></v-btn>
+        <q-btn flat round dense icon="close" @click="closeDrawer" />
       </div>
-      <div v-if="items.length > 0" class="flex flex-col h-full">
-        <div class="flex flex-col gap-4 flex-1">
-          <div class="grid grid-cols-1 gap-4 p-4" v-if="isLoading">
+
+      <template v-if="items.length > 0">
+        <div class="col overflow-auto">
+          <div v-if="isLoading" class="grid grid-cols-1 gap-4 p-4">
             <div v-for="i in 8" :key="i" class="w-full h-full rounded-lg border p-4 shadow-sm">
               <div class="flex gap-2">
-                <v-skeleton-loader type="image" height="160" class="w-1/3 rounded" />
+                <q-skeleton class="w-1/3 rounded" height="160px" />
 
                 <div class="flex flex-col gap-2 flex-1">
-                  <v-skeleton-loader type="heading" class="w-full" />
-
-                  <v-skeleton-loader type="text" class="w-full" />
-                  <v-skeleton-loader type="text" class="w-3/4" />
+                  <q-skeleton type="text" />
+                  <q-skeleton type="text" />
+                  <q-skeleton type="text" width="75%" />
                 </div>
               </div>
 
-              <div class="flex items-center justify-between gap-3">
-                <v-skeleton-loader type="text" width="100" />
-                <v-skeleton-loader type="button" width="100" />
+              <div class="flex items-center justify-between gap-3 mt-4">
+                <q-skeleton type="text" width="100px" />
+                <q-skeleton type="rect" width="100px" height="36px" />
               </div>
             </div>
           </div>
-          <InfoBlock
-            :can-dismiss="true"
-            v-else-if="!isAuthenticated"
-            text="Войдите в аккаунт чтобы сохранить свою корзину"
-            action-text="Перейти к логину"
-            action-to="/login"
-          />
-          <div v-for="p in items" :key="p.productId">
-            <CartItem
-              @remove="removeItem"
-              @decrease="decreaseItem"
-              @increase="increaseItem"
-              variant="elevated"
-              :cart-item="p"
+
+          <template v-else>
+            <InfoBlock
+              v-if="!isAuthenticated"
+              :can-dismiss="true"
+              text="Войдите в аккаунт чтобы сохранить свою корзину"
+              action-text="Перейти к логину"
+              action-to="/login"
             />
-          </div>
+
+            <div class="flex flex-col gap-4 p-4">
+              <div v-for="p in items" :key="p.productId">
+                <CartItem
+                  :cart-item="p"
+                  variant="elevated"
+                  @remove="removeItem"
+                  @decrease="decreaseItem"
+                  @increase="increaseItem"
+                />
+              </div>
+            </div>
+          </template>
         </div>
 
-        <div
-          class="p-4 items-center h-fit justify-between shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)]"
-          elevation="3"
-        >
-          <div><span class="font-bold">Итоговая сумма: </span> {{ totalPrice }}</div>
-          <div><span class="font-bold">Итого товаров: </span> {{ totalCount }}</div>
-          <RouterLink to="/checkout"><Button variant="primary">Оформить заказ</Button> </RouterLink>
+        <div class="p-4 h-fit shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.1)]">
+          <div><span class="font-bold">Итоговая сумма: </span>{{ totalPrice }}</div>
+          <div><span class="font-bold">Итого товаров: </span>{{ totalCount }}</div>
+
+          <RouterLink to="/checkout">
+            <Button variant="primary">Оформить заказ</Button>
+          </RouterLink>
         </div>
-      </div>
+      </template>
 
       <InfoBlock v-else title="Корзина пуста" text="Добавьте товары в корзину" />
-    </div>
-  </v-navigation-drawer>
+    </q-card>
+  </q-dialog>
 </template>
-
-<script lang="ts" setup>
+<script lang="ts">
 import { lockScroll, unlockScroll } from '@/app/stores/ui'
 import { useCart } from '@/shared/composables/useCart'
 import Button from '@/shared/ui/Button/Button.vue'
 import CartItem from '@/shared/ui/CartItem/CartItem.vue'
 import InfoBlock from '@/shared/ui/InfoBlock/InfoBlock.vue'
-import { X } from 'lucide-vue-next'
-import { onBeforeUnmount, watch } from 'vue'
+import { defineComponent, onBeforeUnmount, watch } from 'vue'
 
-const props = defineProps<{
-  modelValue: boolean
-}>()
-const {
-  items,
-  totalCount,
-  totalPrice,
-  decreaseItem,
-  increaseItem,
-  removeItem,
-  isLoading,
-  isAuthenticated,
-} = useCart()
+export default defineComponent({
+  name: 'CartDrawer',
+  components: {
+    Button,
+    CartItem,
+    InfoBlock,
+  },
+  setup(props, { emit }) {
+    const {
+      items,
+      totalCount,
+      totalPrice,
+      decreaseItem,
+      increaseItem,
+      removeItem,
+      isLoading,
+      isAuthenticated,
+    } = useCart()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-}>()
+    // drawer - UI
+    const closeDrawer = () => {
+      emit('update:modelValue', false)
+    }
 
-// drawer - UI
-const closeDrawer = () => {
-  emit('update:modelValue', false)
-}
+    watch(
+      () => props.modelValue,
+      (isOpen) => {
+        if (isOpen) {
+          lockScroll()
+        } else {
+          unlockScroll()
+        }
+      },
+      { immediate: true },
+    )
 
-watch(
-  () => props.modelValue,
-  (isOpen) => {
-    if (isOpen) {
-      lockScroll()
-    } else {
+    onBeforeUnmount(() => {
       unlockScroll()
+    })
+
+    return {
+      closeDrawer,
+      items,
+      totalCount,
+      totalPrice,
+      decreaseItem,
+      increaseItem,
+      removeItem,
+      isLoading,
+      isAuthenticated,
     }
   },
-  { immediate: true },
-)
-
-onBeforeUnmount(() => {
-  unlockScroll()
+  props: {
+    modelValue: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  emits: {
+    'update:modelValue': (value: boolean) => typeof value === 'boolean',
+  },
 })
 </script>

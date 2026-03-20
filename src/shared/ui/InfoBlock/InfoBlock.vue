@@ -33,9 +33,9 @@
     </p>
 
     <RouterLink v-if="actionText && actionTo" :to="actionTo">
-      <v-btn color="blue" variant="outlined">
+      <q-btn color="primary" outline no-caps>
         {{ actionText }}
-      </v-btn>
+      </q-btn>
     </RouterLink>
   </div>
 </template>
